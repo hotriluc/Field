@@ -6,14 +6,19 @@ public class Field {
     private int [][] array;
     private int P;
     private int teta;
-    private int teta_arr_list;
+    private ArrayList<Integer> teta_arr_list;
+    private int signal_arr[];
+
 
 
 
     public Field (int P){
-        this.array=new int[6][P];
+        this.array=new int[6][P-1];
         this.P=P;
         this.teta=2;
+        this.teta_arr_list = new ArrayList<Integer>();
+        this.signal_arr = new int[P-1];
+
     }
 
 
@@ -36,10 +41,20 @@ public class Field {
         this.P=P;
     }
 
-    public ArrayList<Integer> getTetaList(int teta,ArrayList<Integer> coprime_arr_list){
+    public ArrayList<Integer> getTetaList(int teta_min,ArrayList<Integer> coprime_arr_list){
         for(int i=0;i<coprime_arr_list.size();i++){
             int tmp = coprime_arr_list.get(i);
-                tmp = teta;
+            int tmp_teta = (int)Math.pow(teta_min,tmp)%this.P;
+            teta_arr_list.add(tmp_teta);
+        }
+        return this.teta_arr_list;
+    }
+
+    public void printTetaList(){
+
+        for(int i=0;i<teta_arr_list.size();i++){
+
+            System.out.print("\u03F4"+(i+1)+" = "+teta_arr_list.get(i)+"\n");
         }
     }
 
@@ -52,13 +67,13 @@ public class Field {
         this.teta=teta;
     }
 
-    public void fill_1strow(){
+    public void fill_row_Ui(){
         for (int i=0;i<getP()-1;i++){
             array[0][i]=i+1;
         }
     }
 
-    public void fill_2ndrow(){
+    public void fill_row_ai(){
 
         for(int i=0;i<getP()-1;i++){
             array[1][i]= (int)Math.pow(teta,i) % P ;
@@ -66,7 +81,7 @@ public class Field {
     }
 
     /*Заполнение Ai*/
-    public void fill_3rdrow(){
+    public void fill_row_Ai(){
         int tmp=0;
         int position=0;
         for(int i=0;i<getP()-1;i++){
@@ -77,7 +92,7 @@ public class Field {
         }
     }
 
-    public void fill_4throw(){
+    public void fill_row_bi(){
         int tmp=0;
         for (int i=0;i<getP()-1;i++){
             tmp=array[1][i];
@@ -88,7 +103,7 @@ public class Field {
         }
     }
 
-    public void fill_5throw(){
+    public void fill_row_MH(){
         int pos1,pos2;
         int tmp=0;
         for(int i=0;i<getP()-1;i++){
@@ -108,13 +123,20 @@ public class Field {
         }
     }
 
-    public void fill_6throw(){
+    public void fill_row_Psi(){
         int tmp=0;
         for (int i=0;i<getP()-1;i++){
             if(array[4][i]%2==0){
                 array[5][i]=-1;
             }else {array[5][i]=1;}
         }
+    }
+
+    public int[] getPsi(){
+        for(int i=0;i<getP()-1;i++){
+            signal_arr[i] = array[5][i];
+        }
+        return  this.signal_arr;
     }
 
     public void printArray(){
