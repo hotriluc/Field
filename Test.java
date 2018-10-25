@@ -4,6 +4,7 @@ public class Test {
 
     public static void main (String args[]){
         int p = 13;
+
         Field f1 = new Field(p);
         f1.printArray();
 
@@ -34,38 +35,36 @@ public class Test {
         f1.printArray();
 
 
-        int [] a = {1,2,3,4};
-
-        for (int i=0;i<a.length;i++){
-            System.out.print(a[i]+" ");
-        }
-
-
-        int size = a.length;
-        for (int i = 0; i < 1; i++) {
-            int temp = a[size-1];
-            for (int j = size-1; j > 0; j--) {
-                a[j] = a[j-1];
-                //a[j-1] = 0;
-            }
-            a[0] = temp;
-        }
-
-        System.out.println();
-
-        for (int i=0;i<a.length;i++){
-            System.out.print(a[i]+" ");
-        }
-        System.out.println();
-
         int[]b = f1.getPsi();
+        int[]b1 = new int[p-1];
 
+        for(int i =0;i<b.length;i++){
+            b1[i]=b[i];
+        }
        Signal s1 = new Signal(p);
-       s1.setSignal(b);
-       s1.printSignal();
-       for (int i=0;i<s1.getSignal().length;i++) {
+
+        s1.setSignal(b1);
+
+        s1.printSignal();
+        s1.CalculatePAKF(b,s1.getSignal());
+
+
+
+      for (int i=0;i<s1.getSignal().length;i++) {
            s1.CyclicShiftRight(1);
            s1.printSignal();
+            s1.CalculatePAKF(b,s1.getSignal());
        }
+
+
+
+
+
+
+
+
+
+
+
     }
 }
