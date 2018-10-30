@@ -1,37 +1,61 @@
 public class Signal {
 
-    private int signal_arr[];
+    private int sig_arr[];
+    private int R;
 
     public Signal(int p){
-        signal_arr = new int[p-1];
+        sig_arr = new int[p-1];
     }
 
     public void setSignal(int[] arr){
-        this.signal_arr = arr;
+
+        this.sig_arr = arr;
     }
 
     public int[] getSignal(){
-        return this.signal_arr;
+        return this.sig_arr;
     }
 
     public void printSignal(){
-        for(int i=0;i<signal_arr.length;i++){
-            System.out.printf("%4d",signal_arr[i]);
+        for(int i=0;i<sig_arr.length;i++){
+            System.out.printf("%4d",sig_arr[i]);
         }
-        System.out.println();
+        //System.out.println();
     }
 
     public void CyclicShiftRight(int pos){
-        int size = signal_arr.length;
+        int size = sig_arr.length;
         for (int i = 0; i < pos; i++) {
-            int temp = signal_arr[size-1];
+            int temp = sig_arr[size-1];
             for (int j = size-1; j > 0; j--) {
-                signal_arr[j] = signal_arr[j-1];
+                sig_arr[j] = sig_arr[j-1];
                 //a[j-1] = 0;
             }
-            signal_arr[0] = temp;
+            sig_arr[0] = temp;
         }
 
     }
+
+    public int CalculatePAKF(int []arr,int []arr2){
+        R=0;
+        for(int i=0;i<arr.length;i++){
+            int tmp=arr[i]*arr2[i];
+            R+=tmp;
+        }
+        System.out.printf(" R = %d\n",R);
+
+
+        return this.R;
+
+    }
+
+    public void decimation(int []arr, int []arr2, int d){
+        for (int i=0;i<arr.length;i++){
+            int pos = ((d+d*i))% arr.length;
+            arr2[i]=arr[pos];
+        }
+    }
+
+
 
 }
