@@ -49,20 +49,19 @@ public class Test {
 //=======================PEREODICAUTOCORRELATIONFUNCTION==================================
         int[]b = f1.getPsi();//current signal
         int[]b1 = new int[p-1];//creating same signal which will be shifted
-        for(int i =0;i<b.length;i++){
-            b1[i]=b[i];
-        }
-
+        b1 = b.clone();
         Signal s1 = new Signal(p);
         s1.setSignal(b1);
-        s1.printSignal();
+
+        s1.printCorrel(b);
+       /* s1.printSignal();
         s1.CalculatePAKF(b,s1.getSignal());
 
       for (int i=0;i<s1.getSignal().length;i++) {
            s1.CyclicShiftRight(1);
            s1.printSignal();
             s1.CalculatePAKF(b,s1.getSignal());
-       }
+       }*/
 
 //=========================================================
 
@@ -70,24 +69,20 @@ public class Test {
 
 
 
-        int tmp_arr [] = new int[p-1];
-        for(int i =0;i<b.length;i++){
-            tmp_arr[i]=b[i];
-        }
+
         System.out.println();
         System.out.println("Source Signal");
-        printArr(tmp_arr);
+        printArr(b);
 
         int tmp_arr1 [] = new int[p-1];
-        int d =0;
+
 
         for(int i=0;i< cl.size();i++) {
             System.out.printf("\nDecimation Coef = %d\n",cl.get(i));
-            s1.decimation(tmp_arr, tmp_arr1, cl.get(i));
-
-
+            s1.decimation(b, tmp_arr1, cl.get(i));
             printArr(tmp_arr1);
         }
+        System.out.println("\n");
 
     }
 }

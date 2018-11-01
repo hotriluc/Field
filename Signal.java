@@ -56,6 +56,17 @@ public class Signal {
         }
     }
 
+    public void printCorrel(int []arr){
+
+        printSignal();
+        CalculatePAKF(arr,getSignal());
+        for (int i=0;i<getSignal().length;i++) {
+            CyclicShiftRight(1);
+            printSignal();
+            CalculatePAKF(arr,getSignal());
+        }
+    }
+
 
 
 }

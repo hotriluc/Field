@@ -54,7 +54,7 @@ public class Field {
 
         for(int i=0;i<teta_arr_list.size();i++){
 
-            System.out.print("\u03F4"+(i+1)+" = "+teta_arr_list.get(i)+"\n");
+            System.out.printf("\u03F4"+(i+1)+" = "+teta_arr_list.get(i)+"\n");
         }
     }
 
@@ -142,7 +142,7 @@ public class Field {
     public void printArray(){
         for (int i=0;i<6;i++){
             for(int j=0;j<getP()-1;j++){
-                System.out.printf(array[i][j]+"\t");
+                System.out.printf("%4d",array[i][j]);
             }
             System.out.println();
         }
