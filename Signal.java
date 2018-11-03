@@ -36,6 +36,19 @@ public class Signal {
 
     }
 
+    public void ShiftRight(int pos){
+        int size = sig_arr.length;
+        for (int i = 0; i < pos; i++) {
+            int temp = sig_arr[size-1];
+            for (int j = size-1; j > 0; j--) {
+                sig_arr[j] = sig_arr[j-1];
+
+            }
+            sig_arr[0] = 0;
+        }
+
+    }
+
     public int CalculatePAKF(int []arr,int []arr2){
         R=0;
         for(int i=0;i<arr.length;i++){
@@ -56,12 +69,23 @@ public class Signal {
         }
     }
 
-    public void printCorrel(int []arr){
+    public void printPereodicCorrel(int []arr){
 
         printSignal();
         CalculatePAKF(arr,getSignal());
         for (int i=0;i<getSignal().length;i++) {
             CyclicShiftRight(1);
+            printSignal();
+            CalculatePAKF(arr,getSignal());
+        }
+    }
+
+    public void printApereodicCorrel(int []arr){
+
+        printSignal();
+        CalculatePAKF(arr,getSignal());
+        for (int i=0;i<getSignal().length-1;i++) {
+            ShiftRight(1);
             printSignal();
             CalculatePAKF(arr,getSignal());
         }

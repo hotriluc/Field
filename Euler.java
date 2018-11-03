@@ -7,11 +7,13 @@ public class Euler {
     private int n;
     private int p;
     private ArrayList<Integer> coprime_arr_list;
+    private ArrayList<Integer> prime_arr_list;
 
    public Euler(int n){
         this.n=n;
         this.p=n;// will be used in getCoprime cycle
-        this.coprime_arr_list = new ArrayList<Integer>();
+        this.coprime_arr_list = new ArrayList<>();
+        this.prime_arr_list = new ArrayList<>();
     }
 
 
@@ -24,6 +26,7 @@ public class Euler {
         for(int p=2;p*p<=n;p++){
             if (this.n%p==0){
               while (n%p==0)
+
                   n/=p;
 
                   result*=(1.0-(1.0/(double) p));
@@ -38,6 +41,9 @@ public class Euler {
         return this.phi=(int)result;
     }
 
+    public ArrayList<Integer> getPrime(){
+       return this.prime_arr_list;
+    }
     public ArrayList<Integer> getCoprime()
     {
 
@@ -53,12 +59,15 @@ public class Euler {
         return coprime_arr_list;
     }
 
+
+
     public void printCoprime(){
         System.out.print("Coprime: ");
        for(int i=0;i<coprime_arr_list.size();i++){
 
            System.out.print(coprime_arr_list.get(i)+" ");
        }
+
        System.out.println("\n");
     }
 
