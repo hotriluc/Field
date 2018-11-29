@@ -24,9 +24,10 @@ public class Euler {
         //  простые числа p умножаем
         //по такому правилу (1 - 1/p)
         for(int p=2;p*p<=n;p++){
-            if (this.n%p==0){
-              while (n%p==0)
 
+            if (this.n%p==0){
+
+              while (n%p==0)
                   n/=p;
 
                   result*=(1.0-(1.0/(double) p));
@@ -41,7 +42,19 @@ public class Euler {
         return this.phi=(int)result;
     }
 
-    public ArrayList<Integer> getPrime(){
+    public ArrayList<Integer> getPrime(int n){
+       int div = 2;
+        while (n > 1)
+        {
+            while (n % div == 0)
+            {
+
+                n = n / div;
+                prime_arr_list.add(div);
+            }
+            div++;
+        }
+
        return this.prime_arr_list;
     }
     public ArrayList<Integer> getCoprime()

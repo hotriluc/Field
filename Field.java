@@ -1,9 +1,10 @@
-import java.lang.reflect.Array;
+
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.function.IntToDoubleFunction;
+
 
 public class Field {
 
@@ -81,10 +82,12 @@ public class Field {
     public void fill_row_ai() {
 
         for (int i = 0; i < (getP() - 1); i++) {
-            double tmp = Math.pow(teta, i) % P;
+            int p = getP();
+            BigInteger b = BigInteger.valueOf(i);
+            BigInteger a = BigInteger.valueOf(teta);
+            BigInteger c = a.modPow(b,BigInteger.valueOf(p));
 
-            int a = (int) Math.round(tmp);
-            array[1][i] = a;
+            array[1][i] = c.intValue();
         }
         // по известной половине поля можно заполнить оставшуюся часть по формуле a(p-1)/2+n=p-an
       /*  for (int i = (getP()-1)/2;i<getP()-1;i++){
@@ -159,36 +162,53 @@ public class Field {
     public void printArray() {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < getP() - 1; j++) {
-                System.out.printf("%4d", array[i][j]);
+                System.out.printf("%6d", array[i][j]);
             }
             System.out.println();
         }
         System.out.println();
     }
 
-    public int getTetaMin(int teta_min, ArrayList<Integer> cl) {
-        ArrayList<Integer> tmp_arr_list=new ArrayList<>();
-        for(int i=0;i<cl.size();i++){
-            int tmp = cl.get(i);
-            double tmp_teta = Math.pow(teta_min, tmp) % this.P;
-            int rd = (int) Math.round(tmp_teta);
-            tmp_arr_list.add(rd);
+    /*Нахождение TETA_MIN
+    * Выбипается teta_min = 2 и дальше проверяется
+    * Высчитывается функция эйлера для числа p
+    * далее результат от функции эйлера раскладывается на множители,
+    * результат от функции эйлера делим на множители и получаем множество чисел которые будут тестироваться
+    * для нахождения первообразного. Обозначим как test_power {a, b ,c .. z}
+    * тестирование проходит следующим образом teta_min^test_power mod p
+    * если teta_min при всех тестируемых значениях дало результат не = 1, то число является первообрзным
+    * если же хотя бы 1 дало результат 1, то число не первообразный ,teta_min+=1
+    * */
+    public int getTeta_min(Euler e){
+        teta_min=2;
+        int tmp_phi=e.getPhi();
+        ArrayList<Integer> pl = e.getPrime(tmp_phi);
+        Set<Integer> test_power = new HashSet<>();
+        for(int i:pl){
+            System.out.printf("%d ",i);
+            test_power.add(i);
         }
-        boolean flag;
-        for(int i:tmp_arr_list){
-            if(i==1){
-                flag=false;
-                break;
-            }else{
-                System.out.println("OK");
+        List<Integer> list = new ArrayList<>(test_power);
+        System.out.println("\nSet of powers to test size is "+test_power.size());
+        int cnt=0;
+        int ind = 0;
+        while (cnt<list.size()) {
+            BigInteger b = BigInteger.valueOf(tmp_phi / list.get(ind));
+            BigInteger a = BigInteger.valueOf(teta_min);
+            BigInteger c = a.modPow(b,BigInteger.valueOf(getP()));
+            if (c.intValue()==1) {
+                teta_min++;
+                cnt=0;
+                ind=0;
+            } else {
+                cnt++;
+                ind++;
             }
         }
-        if (flag=false){
-            teta_min+=teta_min;
-            getTetaMin(teta_min,  cl);
-        }
-        System.out.println(teta_min);
-        return this.teta_min;
+
+        return teta_min;
     }
+
+
 
     }

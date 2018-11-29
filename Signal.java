@@ -1,10 +1,20 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Signal {
 
     private int sig_arr[];
     private int R;
+    private List<Integer> correl_List;
 
     public Signal(int p){
         sig_arr = new int[p-1];
+        correl_List = new ArrayList<>();
     }
 
     public void setSignal(int[] arr){
@@ -20,7 +30,7 @@ public class Signal {
         for(int i=0;i<sig_arr.length;i++){
             System.out.printf("%4d",sig_arr[i]);
         }
-        //System.out.println();
+        System.out.println();
     }
 
     public void CyclicShiftRight(int pos){
@@ -55,7 +65,7 @@ public class Signal {
             int tmp=arr[i]*arr2[i];
             R+=tmp;
         }
-        System.out.printf(" R = %d\n",R);
+        System.out.printf(" R = %d ",R);
 
 
         return this.R;
@@ -69,27 +79,53 @@ public class Signal {
         }
     }
 
-    public void printPereodicCorrel(int []arr){
 
-        printSignal();
-        CalculatePAKF(arr,getSignal());
-        for (int i=0;i<getSignal().length;i++) {
+    public List<Integer> getAutoCorrelList(int []arr){
+        int cnt=0;
+        int r = CalculatePAKF(arr, getSignal());
+        correl_List.add(r);
+
+        for (int i = 0; i < getSignal().length; i++) {
             CyclicShiftRight(1);
-            printSignal();
-            CalculatePAKF(arr,getSignal());
+            // printSignal();
+            r    = CalculatePAKF(arr, getSignal());
+            correl_List.add(r);
+            cnt++;
+
         }
+        return this.correl_List;
     }
 
-    public void printApereodicCorrel(int []arr){
-
-        printSignal();
-        CalculatePAKF(arr,getSignal());
-        for (int i=0;i<getSignal().length-1;i++) {
+    public  List<Integer>  getApereodicCorrelList(int []arr){
+        int cnt = 0;
+        // printSignal();
+        int r = CalculatePAKF(arr,getSignal());
+        correl_List.add(r);
+        for (int i=0;i<getSignal().length;i++) {
             ShiftRight(1);
-            printSignal();
-            CalculatePAKF(arr,getSignal());
+            //printSignal();
+            r = CalculatePAKF(arr,getSignal());
+            correl_List.add(r);
+            cnt++;
         }
+
+        return this.correl_List;
     }
+    /*
+    * String desc - desciption or header of text file
+    * String path - path to file
+    *
+    * */
+
+    public void printCorrelList(){
+            for(int i:correl_List){
+                System.out.printf("R = %d ",i);
+            }
+    }
+
+
+
+
 
 
 
