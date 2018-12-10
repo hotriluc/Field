@@ -39,8 +39,8 @@ class Plot extends JFrame {
 
         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer( );
         renderer.setSeriesPaint( 0 , Color.RED );
-        renderer.setSeriesStroke( 0 , new BasicStroke( 0.5f ) );
-        renderer.setSeriesShape(0,new Ellipse2D.Double(-3, -3, 6, 6));
+        renderer.setSeriesStroke( 0 , new BasicStroke( 1.0f ) );
+        renderer.setSeriesShape(0,new Ellipse2D.Double(0, 0, 0, 0));
 
 
 

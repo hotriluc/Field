@@ -197,6 +197,7 @@ public class Test {
         }
         System.out.println("\nPFVK");
         List<Integer> pereodic_cross_correl_list=s3.getAutoCorrelList(b);
+
         System.out.println("\nAFVK");
         List<Integer> apereodic_cross_correl_list=s4.getApereodicCorrelList(b);
 
@@ -212,20 +213,20 @@ public class Test {
         /*SignalCount*/
         System.out.printf("Signal count = %d/2 = %d",dec_list.size(),dec_list.size()/2);
         //==============CHARTS==============
-      /*  Plot chart = new Plot("ПФАК",
-                "ПФАК",pereodic_auto_correl_list);
+        Plot chart = new Plot("ПФАК",
+                "ПФАК"+", L = "+Integer.toString(p-1),pereodic_auto_correl_list);
         chart.pack( );
         RefineryUtilities.centerFrameOnScreen( chart );
         chart.setVisible( true );
 
         Plot chart2 = new Plot("АФАК",
-                "АФАК",apereodic_auto_correl_list);
+                "АФАК"+", L = "+Integer.toString(p-1),apereodic_auto_correl_list);
         chart2.pack( );
         RefineryUtilities.centerFrameOnScreen( chart2 );
         chart2.setVisible( true );
 
         Plot chart3 = new Plot("ПФВК",
-                "ПФВК",pereodic_cross_correl_list);
+                "ПФВК"+", L = "+Integer.toString(p-1),pereodic_cross_correl_list);
         chart3.pack( );
         RefineryUtilities.centerFrameOnScreen( chart3 );
 
@@ -233,14 +234,14 @@ public class Test {
 
 
         Plot chart4 = new Plot("АФВК",
-                "АФВК",apereodic_cross_correl_list);
+                "АФВК"+", L = "+Integer.toString(p-1),apereodic_cross_correl_list);
         chart4.pack( );
         RefineryUtilities.centerFrameOnScreen( chart4 );
         chart4.setVisible( true );
 
-        */
 
-      MainFrame mf = new MainFrame(pereodic_auto_correl_list,apereodic_auto_correl_list,pereodic_cross_correl_list,apereodic_cross_correl_list);
+
+     // MainFrame mf = new MainFrame(pereodic_auto_correl_list,apereodic_auto_correl_list,pereodic_cross_correl_list,apereodic_cross_correl_list);
 
     }
 }
