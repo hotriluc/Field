@@ -20,7 +20,19 @@ public class StatClass {
     }
 
     static int getRmax(List<Integer> list){
+
         return  Collections.max(list);
+    }
+
+    static int getRmaxWO(List<Integer> list,int val){
+        int r_max = 0;
+       for(int i =0;i<list.size();i++){
+           if(list.get(i)==val){continue;}
+           else if(list.get(i)>r_max){
+               r_max = list.get(i);
+           }
+       }
+       return r_max;
     }
     static int getRminCnt(List<Integer> list){
 

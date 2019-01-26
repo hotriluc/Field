@@ -87,6 +87,7 @@ public class Signal {
 
         for (int i = 0; i < getSignal().length; i++) {
             CyclicShiftRight(1);
+
             // printSignal();
             r    = CalculatePAKF(arr, getSignal());
             correl_List.add(r);
