@@ -129,6 +129,9 @@ public class CDS {
 
         }
 
+
+        /*ТУТ ВЫБИРАЕМ СИГНАЛ  ИЗ СПИСКА СИГНАЛОВ ПОСТРОЕНЫХ
+        * ПУТЕМ ДЕЦИМАЦИИ ,КОТОРЫй БУДЕМ СКЛАДЫВАТЬ С ИСХОДНЫМ СИГНАЛОМ*/
         System.out.println("\n");
         int[] dec_signal = dec_list.get(2);
         int[] b3 = dec_signal.clone();
@@ -147,17 +150,25 @@ public class CDS {
         System.out.println("\nAFVK");
         List<Integer> apereodic_cross_correl_list=s4.getApereodicCorrelList(b);
 
-        /*Getting Rmax and Rmin*/
-        int cnt_max = StatClass.getRmaxCnt(pereodic_cross_correl_list);
-        int cnt_min = StatClass.getRminCnt(pereodic_cross_correl_list);
+        /*Getting Rmax and Rmin for PFVK*/
+
         int Rmax = StatClass.getRmax(pereodic_cross_correl_list);
+        System.out.printf("\nRmax: %d ",Rmax);
+        int cnt_max = StatClass.getCntAndPos(pereodic_cross_correl_list,Rmax);
+
+
         int Rmin = StatClass.getRmin(pereodic_cross_correl_list);
-       System.out.printf("\nRmax: %d , Count: %d",Rmax,cnt_max);
-        System.out.printf("\nRmin: %d , Count: %d\n",Rmin,cnt_min);
+        System.out.printf("\nRmin: %d ",Rmin);
+        int cnt_min = StatClass.getCntAndPos(pereodic_cross_correl_list,Rmin);
+
+
+       // System.out.printf("\nRmin: %d , Count: %d\n",Rmin,cnt_min);
         double x = Rmax/Math.sqrt(p-1);
-        System.out.printf("x = Rmax/\u221AL = %d/\u221A%d = %f\n",Rmax,p-1,x);
+        System.out.printf("\nx = Rmax/\u221AL = %d/\u221A%d = %f\n",Rmax,p-1,x);
         /*SignalCount*/
         System.out.printf("Signal count = %d/2 = %d",dec_list.size(),dec_list.size()/2);
+
+
         //==============CHARTS==============
         Plot chart = new Plot("ПФАК",
                 "ПФАК"+", L = "+Integer.toString(p-1),pereodic_auto_correl_list);

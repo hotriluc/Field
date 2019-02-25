@@ -10,16 +10,12 @@ import java.util.Scanner;
 //AES PRN TEST
 
 public class AESSeq {
+    private int []arr;
 
-    public static  void  main(String args[]){
+    public int[] genereteSeq(int p){
+        //Генерация криптосигналов
         SecureRandom random = new SecureRandom();
-
-        List<Integer> apereodic_auto_correl_list ;
-        int p;
-        int[] arr;
-        p = new Scanner(System.in).nextInt();
-
-
+        while(true){
             arr = new int[p];
 
             for (int i = 0; i < arr.length; i++) {
@@ -30,29 +26,58 @@ public class AESSeq {
                 } else
                     arr[i] = a;
             }
+            return this.arr;
+        }
+
+    }
+    public static  void  main(String args[]){
+
+
+        List<Integer> apereodic_auto_correl_list ;
+        int p;
+        int[] arr;
+        AESSeq seq = new AESSeq();
+
+       // p = new Scanner(System.in).nextInt();
+        p = 130;
+        //Генерация криптосигналов
+        while(true){
+
+
+            arr = seq.genereteSeq(p);
             //Source Signal arr[]
+            p = 130;
+
+
             System.out.print(Arrays.toString(arr));
             Signal s1 = new Signal(p);
             int[] arr1 = arr.clone(); // will be shifted
             s1.setSignal(arr1);
-            System.out.println("PFAK");
+            System.out.println("\nPFAK");
 
             List<Integer> pereodic_auto_correl_list = s1.getAutoCorrelList(arr);
-            System.out.println(StatClass.getRmaxWO(pereodic_auto_correl_list,p));
-        System.out.println(StatClass.getRmax(pereodic_auto_correl_list)+" "+StatClass.getRmaxCnt(pereodic_auto_correl_list));
 
-           /* Signal s2 = new Signal(p);
+            int rmax = StatClass.getRmaxWO(pereodic_auto_correl_list, p);
+
+            System.out.println("\nRmax:" + rmax);
+            System.out.println("Count: " + StatClass.getCntAndPos(pereodic_auto_correl_list, rmax));
+            if(rmax <=14){break;}//Задаем условие выхода из цикла как только найдется значение меньше или равное
+        }
+
+            Signal s2 = new Signal(p);
             int[] arr2 = arr.clone(); // will be shifted
             s2.setSignal(arr2);
             System.out.println("AFAK");
 
             apereodic_auto_correl_list = s2.getApereodicCorrelList(arr);
              apereodic_auto_correl_list.addAll(apereodic_auto_correl_list);
-
+        int rmax_aper =StatClass.getRmaxWO(apereodic_auto_correl_list, p );
+        System.out.println("\nRmax="+rmax_aper);
+        System.out.println("Count: "+StatClass.getCntAndPos(apereodic_auto_correl_list,rmax_aper));
         Plot chart2 = new Plot("АФАК",
-                "АФАК"+", L = "+Integer.toString(p-1),apereodic_auto_correl_list);
+                "АФАК"+", L = "+Integer.toString(p),apereodic_auto_correl_list);
         chart2.pack( );
         RefineryUtilities.centerFrameOnScreen( chart2 );
-        chart2.setVisible( true );*/
+        chart2.setVisible( true );
     }
 }

@@ -1,3 +1,5 @@
+import org.jfree.ui.RefineryUtilities;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -93,6 +95,7 @@ public class Test {
             }
 
         }
+
     //ОСТАНОВИЛСЯ ВОТ ТУТ КОЕФ ДЕСИМАЦИИ АФАК
         for(int i =1;i<dec_list.size();i++) {
             System.out.println("\nAFAK");
@@ -101,10 +104,17 @@ public class Test {
             int[] b3 = dec_signal.clone();
             Signal s3 = new Signal(p);
             s3.setSignal(b3);
-            s3.printSignal();
+           // s3.printSignal();
+
             List<Integer> apereodic_auto_correl_list2 = s3.getApereodicCorrelList(dec_signal);
-            System.out.println("\nRmax="+StatClass.getRmaxWO(apereodic_auto_correl_list2, p - 1));
+            System.out.println("\n"+i+"\nDecimation coef:"+cl.get(i));
+            int rmax =StatClass.getRmaxWO(apereodic_auto_correl_list2, p - 1);
+            System.out.println("Rmax="+rmax);
+            System.out.println("Count: "+StatClass.getCntAndPos(apereodic_auto_correl_list2,rmax));
+
         }
+
+
 
     }
 }

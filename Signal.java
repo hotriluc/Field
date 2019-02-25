@@ -11,10 +11,12 @@ public class Signal {
     private int sig_arr[];
     private int R;
     private List<Integer> correl_List;
+    private List<int[]> list_w_arr;
 
     public Signal(int p){
         sig_arr = new int[p-1];
         correl_List = new ArrayList<>();
+       list_w_arr = new ArrayList<>();
     }
 
     public void setSignal(int[] arr){
@@ -27,9 +29,10 @@ public class Signal {
     }
 
     public void printSignal(){
-        for(int i=0;i<sig_arr.length;i++){
+        /*for(int i=0;i<sig_arr.length;i++){
             System.out.printf("%4d",sig_arr[i]);
-        }
+        }*/
+        System.out.print(Arrays.toString(sig_arr));
         System.out.println();
     }
 
@@ -65,7 +68,7 @@ public class Signal {
             int tmp=arr[i]*arr2[i];
             R+=tmp;
         }
-        System.out.printf(" R = %d ",R);
+        System.out.printf(" R = %d ",R);//ЗАКОМЕНТИРОВАТЬ ЧТОБЫ ВМЕЩАЛОСЬ В КОНСОЛЬ ЕСЛИ БОЛЬШОЙ ПЕРИОД
 
 
         return this.R;
@@ -79,16 +82,27 @@ public class Signal {
         }
     }
 
+    /*Лист хранящий каждый сдвиг Переодической функции корелляции
+    * */
+    public List<int[]> getListWithArrPereodic(){
 
+        return this.list_w_arr;
+    }
+
+
+    /*List with  Correlation Coef Pereodic
+     * */
     public List<Integer> getAutoCorrelList(int []arr){
+        //list_w_arr.clear();
         int cnt=0;
         int r = CalculatePAKF(arr, getSignal());
         correl_List.add(r);
 
         for (int i = 0; i < getSignal().length; i++) {
             CyclicShiftRight(1);
-
-            // printSignal();
+            int tmp_arr[] = sig_arr.clone();
+            list_w_arr.add(tmp_arr);
+             printSignal();
             r    = CalculatePAKF(arr, getSignal());
             correl_List.add(r);
             cnt++;
@@ -97,6 +111,8 @@ public class Signal {
         return this.correl_List;
     }
 
+    /*List with  Correlation Coef Apereodic
+    * */
     public  List<Integer>  getApereodicCorrelList(int []arr){
         int cnt = 0;
         // printSignal();

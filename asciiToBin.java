@@ -1,7 +1,10 @@
+import org.jfree.ui.RefineryUtilities;
+
 import java.io.*;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class asciiToBin {
     public static String readFileAsString(String fileName)throws Exception
@@ -65,37 +68,87 @@ public class asciiToBin {
 
         System.out.println(fromByteToString(newb,0,5));*/
 
-        int [] b = new int[1024];
+        int [] b = new int[1024000];
+        int cnt = 0;
         try (RandomAccessFile raf = new RandomAccessFile("Kalyna.dat", "rw")) {
             //Stop while reaching EOF = -1
-         /*  while (raf.read()!=-1){
+           while (raf.read()!=-1){
 
-               raf.read();
-           }*/
+               b[cnt]=raf.read();
+               cnt++;
+           }
          //Считываем с файла от 0 до 20 по байтно
             //поставим потом seek чтобы можно было считывать от конкретной позиции файла
             System.out.println("Reading from file");
-
-         for (int i = 0 ;i<1024;i++){
+           // raf.seek(8191);
+         /*for (int i = 0 ;i<20;i++){
              b[i]= raf.read();
-         }
+         }*/
         }catch (IOException e){}
+
         //Выводим послдовательность байт
-        System.out.println(Arrays.toString(b));
+        //System.out.println(Arrays.toString(b));
+
         //Переводим последовательность байт в бинарный вид
         String sequence  = fromByteToString(b,0,b.length);
-        System.out.println(sequence);
+       // System.out.println(sequence);
         //sequence.replaceAll("\\s","");
 
         //Converting sequence to char array without whitespace;
-        char[] lol = sequence.replaceAll("\\s","").toCharArray();
-        System.out.println("Seq lenght w/o whitespace = "+lol.length);
+        char[] arr_wo = sequence.replaceAll("\\s","").toCharArray();
+        System.out.println("Seq lenght w/o whitespace = "+arr_wo.length);
 
 
-        int[]dig_tmp1 = new int[lol.length];
-        for(int i=0;i<lol.length;i++){
-            dig_tmp1[i]= Integer.parseInt(String.valueOf(lol[i]));
+        int[]dig_tmp1 = new int[arr_wo.length];
+        for(int i=0;i<dig_tmp1.length;i++){
+            dig_tmp1[i]= Integer.parseInt(String.valueOf(arr_wo[i]));
         }
-        System.out.println(Arrays.toString(dig_tmp1)+"\n");
+        //System.out.println(Arrays.toString(dig_tmp1)+"\n");
+
+        //ПРОИНВЕРТИРОВАТЬ 0 = -1
+
+
+        for(int i=0;i<dig_tmp1.length;i++){
+            if(dig_tmp1[i]==0) {
+                dig_tmp1[i] = -1;
+            }
+        }
+        int start=0;
+        int finish=130;
+        int p = finish;
+        int[] somearr;
+        while (true) {
+             somearr = Arrays.copyOfRange(dig_tmp1, start, finish);
+            if(finish>dig_tmp1.length){System.out.println("Finish");break;}
+            int[] shift_arr = somearr.clone();
+            Signal sig = new Signal(somearr.length);
+            sig.setSignal(shift_arr);
+            System.out.println("PFAK");
+            List<Integer> pereodic_auto_correl_list = sig.getAutoCorrelList(somearr);
+            int rmax_aper = StatClass.getRmaxWO(pereodic_auto_correl_list, somearr.length);
+            System.out.println("\nRmax=" + rmax_aper);
+            System.out.println("Count: " + StatClass.getCntAndPos(pereodic_auto_correl_list, rmax_aper));
+            if(rmax_aper<=10){
+                break;
+            }else{
+                finish+=3;
+                start+=3;
+            }
+        }
+    /*AFAR
+        Signal s2 = new Signal(p);
+        int[] arr2 = somearr.clone(); // will be shifted
+        s2.setSignal(arr2);
+        System.out.println("AFAK");
+
+        List<Integer>apereodic_auto_correl_list = s2.getApereodicCorrelList(somearr);
+        apereodic_auto_correl_list.addAll(apereodic_auto_correl_list);
+        int rmax_aper =StatClass.getRmaxWO(apereodic_auto_correl_list, p );
+        System.out.println("\nRmax="+rmax_aper);
+        System.out.println("Count: "+StatClass.getCntAndPos(apereodic_auto_correl_list,rmax_aper));
+
+        */
+
+
     }
 }

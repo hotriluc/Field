@@ -19,55 +19,43 @@ public class StatClass {
         return true;
     }
 
+    /*Getting max in list Для ФВК */
     static int getRmax(List<Integer> list){
 
         return  Collections.max(list);
     }
+    /*Getting max in list ФВК*/
+    static int getRmin(List<Integer> list){
+        return  Collections.min(list);
+    }
 
+    /*Getting max in list w/o specific value Для ФАК*/
     static int getRmaxWO(List<Integer> list,int val){
         int r_max = 0;
        for(int i =0;i<list.size();i++){
            if(list.get(i)==val){continue;}
            else if(list.get(i)>r_max){
                r_max = list.get(i);
+
            }
        }
        return r_max;
     }
-    static int getRminCnt(List<Integer> list){
 
-        int cnt_min = 0;
-        int min = list.get(0);
 
-        for(int i=0;i<list.size();i++){
-            if(list.get(i)==min){
-                cnt_min++;
-            }else if(list.get(i)<min){
-                min = list.get(i);
-                cnt_min = 1;
+
+    /*Подсчет конкретного количества значеиня в листе*/
+    static int getCntAndPos(List<Integer> list,int searchValue){
+        int sum =0;
+        System.out.print("Position: ");
+        for (int i = 0;i<list.size();i++){
+            if(list.get(i).equals(searchValue)) {
+
+                System.out.print(i+" ");
+                sum++;
             }
         }
-        return cnt_min;
-    }
 
-    static int getRmin(List<Integer> list){
-        return  Collections.min(list);
-    }
-
-    static int getRmaxCnt(List<Integer> list){
-
-        int cnt_max = 0;
-        int max = list.get(0);
-
-
-        for(int i=0;i<list.size();i++){
-            if(list.get(i)==max){
-                cnt_max++;
-            }else if(list.get(i)>max){
-                max = list.get(i);
-                cnt_max = 1;
-            }
-        }
-        return cnt_max;
+        return sum;
     }
 }
