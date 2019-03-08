@@ -7,9 +7,17 @@ import java.util.Set;
 
 public class TestKS_Pair {
 
+    static long binomial(long n, long m) {
+        m = Math.min(m, n - m);
+        long res = 1;
+        for (long i = 0; i < m; i++) {
+            res = res * (n - i) / (i + 1);
+        }
+        return res;
+    }
 
     public static void main(String[]args){
-        int p = 31;
+        int p = 127;
         AESSeq seq1 = new AESSeq();
         AESSeq seq2 = new AESSeq();
         List<Integer> pereodic_cross_correl_list;
@@ -28,7 +36,7 @@ public class TestKS_Pair {
 
             int rmax = StatClass.getRmaxWO(pereodic_cross_correl_list, p);
             System.out.println("\nRmax:" + rmax);
-            if(rmax<=1.5*Math.sqrt(p)) {
+            if(rmax<13) {
                 break;
                /* Set s = new HashSet(pereodic_cross_correl_list);
                 if(s.size()==3){
@@ -37,11 +45,19 @@ public class TestKS_Pair {
             }
         }
 
+        /*Количество пар C из n по m*/
+        long pair_cnt = binomial(p+2,2) ;
+        System.out.println("Pair Count: "+pair_cnt);
+        /*Каждые из пар образуют так же по 33 сигнала
+        * изза того что повторяются 2 поделим на 2*/
+        long total_capacity =  (p*pair_cnt)/2;
+        System.out.println("Total Capacity: "+total_capacity);
+        /*
         pereodic_cross_correl_list.addAll(pereodic_cross_correl_list);
         Plot pfvk_chart = new Plot("PFVK",
                 "ПФВК"+", L = "+Integer.toString(p),pereodic_cross_correl_list);
         pfvk_chart.pack( );
         RefineryUtilities.centerFrameOnScreen( pfvk_chart );
-        pfvk_chart.setVisible( true );
+        pfvk_chart.setVisible( true );*/
     }
 }

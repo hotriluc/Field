@@ -8,10 +8,11 @@ import java.util.List;
 
 public class Signal {
 
-    private int sig_arr[];
-    private int R;
-    private List<Integer> correl_List;
-    private List<int[]> list_w_arr;
+    private int sig_arr[];//сигнал
+    private int R;//значение коеф кореляции
+    private List<Integer> correl_List;//Лист хранящий значения коеф кореляции на каждой сдвижке сигнала
+    private List<int[]> list_w_arr;//Лист хранящий сдвижки сигнала
+    
 
     public Signal(int p){
         sig_arr = new int[p-1];
@@ -93,7 +94,7 @@ public class Signal {
     /*List with  Correlation Coef Pereodic
      * */
     public List<Integer> getAutoCorrelList(int []arr){
-        //list_w_arr.clear();
+        list_w_arr.clear();
         int cnt=0;
         int r = CalculatePAKF(arr, getSignal());
         correl_List.add(r);
@@ -102,7 +103,8 @@ public class Signal {
             CyclicShiftRight(1);
             int tmp_arr[] = sig_arr.clone();
             list_w_arr.add(tmp_arr);
-             printSignal();
+
+            // printSignal();
             r    = CalculatePAKF(arr, getSignal());
             correl_List.add(r);
             cnt++;

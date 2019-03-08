@@ -106,7 +106,9 @@ public class Test {
             s3.setSignal(b3);
            // s3.printSignal();
 
+            System.out.println(Arrays.toString(dec_signal));
             List<Integer> apereodic_auto_correl_list2 = s3.getApereodicCorrelList(dec_signal);
+
             System.out.println("\n"+i+"\nDecimation coef:"+cl.get(i));
             int rmax =StatClass.getRmaxWO(apereodic_auto_correl_list2, p - 1);
             System.out.println("Rmax="+rmax);
