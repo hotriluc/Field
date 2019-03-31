@@ -124,7 +124,7 @@ public class asciiToBin {
             Signal sig = new Signal(somearr.length);
             sig.setSignal(shift_arr);
             System.out.println("PFAK");
-            List<Integer> pereodic_auto_correl_list = sig.getAutoCorrelList(somearr);
+            List<Integer> pereodic_auto_correl_list = sig.getPereodicCorrelList(somearr,true);
             int rmax_aper = StatClass.getRmaxWO(pereodic_auto_correl_list, somearr.length);
             System.out.println("\nRmax=" + rmax_aper);
             System.out.println("Count: " + StatClass.getCntAndPos(pereodic_auto_correl_list, rmax_aper));

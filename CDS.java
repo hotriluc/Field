@@ -10,8 +10,167 @@ import java.math.BigInteger;
 import java.util.*;
 import java.util.List;
 
-
+enum FVK{
+    PFVK,
+    AFVK
+}
 public class CDS {
+
+    public static void SourceSigWithSigList(FVK f,int[]source_sig,List<int[]> sig_list,boolean printflag) {
+        switch (f) {
+            case PFVK: {
+                System.out.println("\n========================");
+                List<Integer> rmax_list = new ArrayList<>();
+                List<Double> avg_module_list = new ArrayList<>();
+                List<Double> dispersion_module_list = new ArrayList<>();
+                List<Double> deviation_module_list = new ArrayList<>();
+
+                List<Double> avg_list = new ArrayList<>();
+                List<Double> dispersion_list = new ArrayList<>();
+                List<Double> deviation_list = new ArrayList<>();
+
+
+                /*для расчета фвк исходного сигнала с остальными сигналами коеф децимации
+                 * цикл начинаем с 1(т.е без сигнала построенного коеф децимицаии 1)
+                 * */
+                for (int i = 1; i < sig_list.size(); i++) {
+                    Signal s = new Signal();
+                    s.setSignal(sig_list.get(i));
+                    System.out.println("\nPFVK");
+                    List<Integer> pereodic_cross_correl_list = s.getPereodicCorrelList(source_sig, printflag);
+
+                    int r_max = StatClass.getRmaxWO(pereodic_cross_correl_list, source_sig.length);
+                    System.out.println("\nRmax=" + r_max + " = " + "x\u221AL = " + StatClass.getX(r_max, source_sig.length) + "\u221A" + source_sig.length);
+                    System.out.println("Count: " + StatClass.getCntAndPos(pereodic_cross_correl_list, r_max));
+
+                    /*
+                    int r_min = StatClass.getRmin(pereodic_cross_correl_list);
+                    System.out.printf("Rmin: %d \n",r_min);
+                    System.out.println("Count: " + StatClass.getCntAndPos(pereodic_cross_correl_list,r_min));
+                    */
+
+                    //для значения rmax
+                    rmax_list.add(r_max);
+
+                    /*
+                      Для модулей
+                    //для мат ожидание модулей боковых выбросов
+                    List<Integer> tmp_list = new ArrayList<>();
+                    tmp_list.addAll(pereodic_cross_correl_list);
+                    StatClass.ModuleSignal(tmp_list);
+                    double avg_module_x = StatClass.CalculateAVG(tmp_list);
+                    System.out.println("AVG_module:" + avg_module_x / Math.sqrt(source_sig.length));
+                    avg_module_list.add(StatClass.CalculateAVG(tmp_list));
+
+                    //дисперсия модулей
+                    double dispersion_module_x = StatClass.CalculateDispersion(tmp_list, avg_module_x);
+                    System.out.println("Dispersion_Module:" + dispersion_module_x / Math.sqrt(source_sig.length));
+                    dispersion_module_list.add(dispersion_module_x);
+
+                    //СКО модулей
+                    double deviation_module_x = Math.sqrt(dispersion_module_x);
+                    System.out.println("Deviation_Module:" + deviation_module_x / Math.sqrt(source_sig.length));
+                    deviation_module_list.add(deviation_module_x);
+                    */
+
+                    //FLAG = TRUE для модулей боковых выбросов
+                    StatClass.CalculateAndSet(pereodic_cross_correl_list,source_sig,avg_module_list,dispersion_module_list,deviation_module_list,true);
+
+                    /*Для всех боковых выбросов*/
+                    /*
+                    List<Integer> tmp_list2 = new ArrayList<>();
+                    tmp_list2.addAll(pereodic_cross_correl_list);
+
+                    double avg_x = StatClass.CalculateAVG(tmp_list2);
+                    System.out.println("AVG_module:" + avg_x / Math.sqrt(source_sig.length));
+                    avg_list.add(StatClass.CalculateAVG(tmp_list2));
+
+                    double dispersion_x = StatClass.CalculateDispersion(tmp_list2, avg_x);
+                    System.out.println("Dispersion_Module:" + dispersion_x / Math.sqrt(source_sig.length));
+                    dispersion_list.add(dispersion_x);
+
+                    double deviation_x = Math.sqrt(dispersion_x);
+                    System.out.println("Deviation_Module:" + deviation_x / Math.sqrt(source_sig.length));
+                    deviation_list.add(deviation_x);*/
+
+                    /*flag = false Для всех боковых выбросов*/
+                    StatClass.CalculateAndSet(pereodic_cross_correl_list,source_sig,avg_list,dispersion_list,deviation_list,false);
+
+                }
+
+                System.out.println("\n==========STAT==========");
+                System.out.println("X = " + StatClass.CalculateAVG(rmax_list) / Math.sqrt(source_sig.length));
+                System.out.println("AVG_Module = " + StatClass.CalculateAVG(avg_module_list)/ Math.sqrt(source_sig.length));
+                System.out.println("Dispersion_Module = " + StatClass.CalculateAVG(dispersion_module_list)/ Math.sqrt(source_sig.length));
+                System.out.println("Deviation_Module = " + StatClass.CalculateAVG(deviation_module_list)/ Math.sqrt(source_sig.length));
+                System.out.println("AVG_ = " + StatClass.CalculateAVG(avg_list)/ Math.sqrt(source_sig.length));
+                System.out.println("Dispersion_ = " + StatClass.CalculateAVG(dispersion_list)/ Math.sqrt(source_sig.length));
+                System.out.println("Deviation_ = " + StatClass.CalculateAVG(deviation_list)/ Math.sqrt(source_sig.length));
+                System.out.println("\n========================");
+            }
+            break;
+
+            case AFVK: {
+
+                List<Integer> rmax_list = new ArrayList<>();
+                List<Double> avg_module_list = new ArrayList<>();
+                List<Double> dispersion_module_list = new ArrayList<>();
+                List<Double> deviation_module_list = new ArrayList<>();
+
+                List<Double> avg_list = new ArrayList<>();
+                List<Double> dispersion_list = new ArrayList<>();
+                List<Double> deviation_list = new ArrayList<>();
+                /*для расчета фвк исходного сигнала с остальными сигналами коеф децимации
+                 * цикл начинаем с 1(т.е без сигнала построенного коеф децимицаии 1)
+                 * */
+                for (int i = 1; i < sig_list.size(); i++) {
+                    Signal s = new Signal();
+                    s.setSignal(sig_list.get(i));
+                    System.out.println("\nAFVK");
+                    List<Integer> apereodic_cross_correl_list = s.getApereodicCorrelList(source_sig, printflag);
+
+                    int r_max = StatClass.getRmaxWO(apereodic_cross_correl_list, source_sig.length);
+                    System.out.println("\nRmax=" + r_max + " = " + "x\u221AL = " + StatClass.getX(r_max, source_sig.length) + "\u221A" + source_sig.length);
+                    System.out.println("Count: " + StatClass.getCntAndPos(apereodic_cross_correl_list, r_max));
+
+                    /*
+                    int r_min = StatClass.getRmin(pereodic_cross_correl_list);
+                    System.out.printf("Rmin: %d \n",r_min);
+                    System.out.println("Count: " + StatClass.getCntAndPos(pereodic_cross_correl_list,r_min));
+                    */
+                    //для значения rmax
+                    rmax_list.add(r_max);
+
+                    StatClass.CalculateAndSet(apereodic_cross_correl_list,source_sig,avg_module_list,dispersion_module_list,deviation_module_list,true);
+                    StatClass.CalculateAndSet(apereodic_cross_correl_list,source_sig,avg_list,dispersion_list,deviation_list,false);
+
+
+
+                }
+
+                System.out.println("\n==========STAT==========");
+                System.out.println("X = " + StatClass.CalculateAVG(rmax_list) / Math.sqrt(source_sig.length));
+                System.out.println("AVG_Module = " + StatClass.CalculateAVG(avg_module_list)/ Math.sqrt(source_sig.length));
+                System.out.println("Dispersion_Module = " + StatClass.CalculateAVG(dispersion_module_list)/ Math.sqrt(source_sig.length));
+                System.out.println("Deviation_Module = " + StatClass.CalculateAVG(deviation_module_list)/ Math.sqrt(source_sig.length));
+                System.out.println("AVG_ = " + StatClass.CalculateAVG(avg_list)/ Math.sqrt(source_sig.length));
+                System.out.println("Dispersion_ = " + StatClass.CalculateAVG(dispersion_list)/ Math.sqrt(source_sig.length));
+                System.out.println("Deviation_ = " + StatClass.CalculateAVG(deviation_list)/ Math.sqrt(source_sig.length));
+                System.out.println("\n========================");
+            }break;
+
+            default: {
+                System.out.println("No such a method");
+            }
+            break;
+
+        }
+
+
+    }
+
+
+
 
 
 
@@ -43,14 +202,14 @@ public class CDS {
         System.out.println("\u03D5("+(p-1)+") = "+eil.getPhi());
 
         //with euclide algorithm searching for all coprime of n
-         ArrayList<Integer> cl = eil.getCoprime();
+        ArrayList<Integer> cl = eil.getCoprime();
         eil.printCoprime();
 
         /*
-        * TETA_MIN CALCULATING
-        *
-        *
-        * */
+         * TETA_MIN CALCULATING
+         *
+         *
+         * */
         Euler eil2 = new Euler(p);
         System.out.print("\u03D5("+(p)+") = "+eil2.getPhi()+ " = ");
         teta_min = f1.getTeta_min(eil2);
@@ -59,7 +218,7 @@ public class CDS {
 
 
 
-       // f1.getTetaMin(2,cl);
+        // f1.getTetaMin(2,cl);
         /*Getting All Tetas*/
       /*  System.out.println("Let \u03F4min = "+teta_min+" then");
         f1.getTetaList(teta_min,cl);
@@ -89,14 +248,14 @@ public class CDS {
         s1.setSignal(b1);
         System.out.println("PFAK");
 
-         List<Integer> pereodic_auto_correl_list=s1.getAutoCorrelList(b);
+        List<Integer> pereodic_auto_correl_list=s1.getPereodicCorrelList(b,true);
         //s1.printCorrelList();
 
 
         System.out.println("\nAFAK");
         Signal s2 = new Signal(p);
         s2.setSignal(b2);
-        List<Integer> apereodic_auto_correl_list = s2.getApereodicCorrelList(b);
+        List<Integer> apereodic_auto_correl_list = s2.getApereodicCorrelList(b,true);
 
 
 
@@ -131,9 +290,9 @@ public class CDS {
 
 
         /*ТУТ ВЫБИРАЕМ СИГНАЛ  ИЗ СПИСКА СИГНАЛОВ ПОСТРОЕНЫХ
-        * ПУТЕМ ДЕЦИМАЦИИ ,КОТОРЫй БУДЕМ СКЛАДЫВАТЬ С ИСХОДНЫМ СИГНАЛОМ*/
+         * ПУТЕМ ДЕЦИМАЦИИ ,КОТОРЫй БУДЕМ СКЛАДЫВАТЬ С ИСХОДНЫМ СИГНАЛОМ*/
         System.out.println("\n");
-        int[] dec_signal = dec_list.get(2);
+        int[] dec_signal = dec_list.get(dec_list.size()-1);
         int[] b3 = dec_signal.clone();
         int[] b4 = dec_signal.clone();
 
@@ -145,10 +304,10 @@ public class CDS {
             System.out.printf("%4d",i);
         }
         System.out.println("\nPFVK");
-        List<Integer> pereodic_cross_correl_list=s3.getAutoCorrelList(b);
+        List<Integer> pereodic_cross_correl_list=s3.getPereodicCorrelList(b,true);
 
         System.out.println("\nAFVK");
-        List<Integer> apereodic_cross_correl_list=s4.getApereodicCorrelList(b);
+        List<Integer> apereodic_cross_correl_list=s4.getApereodicCorrelList(b,true);
 
         /*Getting Rmax and Rmin for PFVK*/
 
@@ -162,7 +321,7 @@ public class CDS {
         int cnt_min = StatClass.getCntAndPos(pereodic_cross_correl_list,Rmin);
 
 
-       // System.out.printf("\nRmin: %d , Count: %d\n",Rmin,cnt_min);
+        // System.out.printf("\nRmin: %d , Count: %d\n",Rmin,cnt_min);
         double x = Rmax/Math.sqrt(p-1);
         System.out.printf("\nx = Rmax/\u221AL = %d/\u221A%d = %f\n",Rmax,p-1,x);
         /*SignalCount*/
@@ -196,9 +355,10 @@ public class CDS {
         RefineryUtilities.centerFrameOnScreen( chart4 );
         chart4.setVisible( true );
 
+        CDS.SourceSigWithSigList(FVK.PFVK,b,dec_list,false);
+        CDS.SourceSigWithSigList(FVK.AFVK,b,dec_list,false);
 
-
-     // MainFrame mf = new MainFrame(pereodic_auto_correl_list,apereodic_auto_correl_list,pereodic_cross_correl_list,apereodic_cross_correl_list);
+        // MainFrame mf = new MainFrame(pereodic_auto_correl_list,apereodic_auto_correl_list,pereodic_cross_correl_list,apereodic_cross_correl_list);
 
     }
 }

@@ -57,19 +57,26 @@ public class Euler {
 
        return this.prime_arr_list;
     }
+
+
+    //26.03.2019 dobavil if
     public ArrayList<Integer> getCoprime()
     {
 
-
-        for (int i=1;i<p;i++){
-            if(new Euclide().getGCD(p,i)==1){
-                int tmp = i;
-                coprime_arr_list.add(tmp);
+        if(coprime_arr_list.size()==0) {
+            for (int i = 1; i < p; i++) {
+                if (new Euclide().getGCD(p, i) == 1) {
+                    int tmp = i;
+                    coprime_arr_list.add(tmp);
+                }
+            }
+            return this.coprime_arr_list;
+        }else{
+            return coprime_arr_list;
         }
-        }
 
 
-        return coprime_arr_list;
+        //return coprime_arr_list;
     }
 
 

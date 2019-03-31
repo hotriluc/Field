@@ -11,13 +11,23 @@ public class Signal {
     private int sig_arr[];//сигнал
     private int R;//значение коеф кореляции
     private List<Integer> correl_List;//Лист хранящий значения коеф кореляции на каждой сдвижке сигнала
-    private List<int[]> list_w_arr;//Лист хранящий сдвижки сигнала
-    
+    private List<int[]> list_w_arr;//Лист хранящий сдвижки сигнала(кодовые последовательности)
+    private List<int[]> decimation_list;//ХДС ДЛЯ РАЗНЫХ КОЕФ ДЕЦИМАЦИИ
+
+    public Signal(){
+
+            //sig_arr = new int[p-1];
+            correl_List = new ArrayList<>();
+            list_w_arr = new ArrayList<>();
+            decimation_list = new ArrayList<>();
+
+    }
 
     public Signal(int p){
         sig_arr = new int[p-1];
         correl_List = new ArrayList<>();
-       list_w_arr = new ArrayList<>();
+        list_w_arr = new ArrayList<>();
+        decimation_list = new ArrayList<>();
     }
 
     public void setSignal(int[] arr){
@@ -63,13 +73,13 @@ public class Signal {
 
     }
 
-    public int CalculatePAKF(int []arr,int []arr2){
+    public int CalculateCorrelationCoef(int []arr,int []arr2){
         R=0;
         for(int i=0;i<arr.length;i++){
             int tmp=arr[i]*arr2[i];
             R+=tmp;
         }
-        System.out.printf(" R = %d ",R);//ЗАКОМЕНТИРОВАТЬ ЧТОБЫ ВМЕЩАЛОСЬ В КОНСОЛЬ ЕСЛИ БОЛЬШОЙ ПЕРИОД
+       // System.out.printf(" R = %d ",R);//ЗАКОМЕНТИРОВАТЬ ЧТОБЫ ВМЕЩАЛОСЬ В КОНСОЛЬ ЕСЛИ БОЛЬШОЙ ПЕРИОД
 
 
         return this.R;
@@ -83,6 +93,24 @@ public class Signal {
         }
     }
 
+    public List<int[]> getDecimation_list(int[]source_signal,List<Integer> coprime_list) throws IOException{
+        int p = source_signal.length;
+        try (BufferedWriter bf = new BufferedWriter(new FileWriter("Decimation.txt"))) {
+
+            for (int i = 0; i < coprime_list.size(); i++) {
+                int tmp_arr1 [] = new int[p];
+                //System.out.printf("\nDecimation Coef = %d\n", cl.get(i));
+                decimation(source_signal, tmp_arr1, coprime_list.get(i));
+                //printArr(tmp_arr1);
+                decimation_list.add(tmp_arr1);
+                bf.write(Arrays.toString(tmp_arr1)+"\n");
+                bf.flush();
+            }
+
+        }
+        return this.decimation_list;
+    }
+
     /*Лист хранящий каждый сдвиг Переодической функции корелляции
     * */
     public List<int[]> getListWithArrPereodic(){
@@ -93,11 +121,14 @@ public class Signal {
 
     /*List with  Correlation Coef Pereodic
      * */
-    public List<Integer> getAutoCorrelList(int []arr){
+    public List<Integer> getPereodicCorrelList(int []arr, boolean print_flag){
         list_w_arr.clear();
         int cnt=0;
-        int r = CalculatePAKF(arr, getSignal());
+        int r = CalculateCorrelationCoef(arr, getSignal());
         correl_List.add(r);
+        if(print_flag==true){
+            System.out.printf(" R = %d ",r);
+        }
 
         for (int i = 0; i < getSignal().length; i++) {
             CyclicShiftRight(1);
@@ -105,8 +136,12 @@ public class Signal {
             list_w_arr.add(tmp_arr);
 
             // printSignal();
-            r    = CalculatePAKF(arr, getSignal());
+            r    = CalculateCorrelationCoef(arr, getSignal());
             correl_List.add(r);
+
+            if(print_flag==true){
+                System.out.printf(" R = %d ",r);
+            }
             cnt++;
 
         }
@@ -115,15 +150,22 @@ public class Signal {
 
     /*List with  Correlation Coef Apereodic
     * */
-    public  List<Integer>  getApereodicCorrelList(int []arr){
+    public  List<Integer>  getApereodicCorrelList(int []arr,boolean print_flag){
         int cnt = 0;
         // printSignal();
-        int r = CalculatePAKF(arr,getSignal());
+        int r = CalculateCorrelationCoef(arr,getSignal());
+        if(print_flag==true){
+            System.out.printf(" R = %d ",r);
+        }
         correl_List.add(r);
+
         for (int i=0;i<getSignal().length;i++) {
             ShiftRight(1);
             //printSignal();
-            r = CalculatePAKF(arr,getSignal());
+            r = CalculateCorrelationCoef(arr,getSignal());
+            if(print_flag==true){
+                System.out.printf(" R = %d ",r);
+            }
             correl_List.add(r);
             cnt++;
         }

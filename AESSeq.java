@@ -55,7 +55,7 @@ public class AESSeq {
             s1.setSignal(arr1);
             System.out.println("\nPFAK");
 
-            List<Integer> pereodic_auto_correl_list = s1.getAutoCorrelList(arr);
+            List<Integer> pereodic_auto_correl_list = s1.getPereodicCorrelList(arr,true);
 
             int rmax = StatClass.getRmaxWO(pereodic_auto_correl_list, p);
 
@@ -69,7 +69,7 @@ public class AESSeq {
             s2.setSignal(arr2);
             System.out.println("AFAK");
 
-            apereodic_auto_correl_list = s2.getApereodicCorrelList(arr);
+            apereodic_auto_correl_list = s2.getApereodicCorrelList(arr,true);
              apereodic_auto_correl_list.addAll(apereodic_auto_correl_list);
         int rmax_aper =StatClass.getRmaxWO(apereodic_auto_correl_list, p );
         System.out.println("\nRmax="+rmax_aper);

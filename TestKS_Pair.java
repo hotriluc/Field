@@ -17,7 +17,7 @@ public class TestKS_Pair {
     }
 
     public static void main(String[]args){
-        int p = 127;
+        int p = 1023;
         AESSeq seq1 = new AESSeq();
         AESSeq seq2 = new AESSeq();
         List<Integer> pereodic_cross_correl_list;
@@ -32,11 +32,11 @@ public class TestKS_Pair {
             Signal s1 = new Signal(p);
 
             s1.setSignal(arr2);
-            pereodic_cross_correl_list = s1.getAutoCorrelList(source_sig);
+            pereodic_cross_correl_list = s1.getPereodicCorrelList(source_sig,true);
 
             int rmax = StatClass.getRmaxWO(pereodic_cross_correl_list, p);
             System.out.println("\nRmax:" + rmax);
-            if(rmax<13) {
+            if(rmax<=72) {
                 break;
                /* Set s = new HashSet(pereodic_cross_correl_list);
                 if(s.size()==3){
@@ -50,7 +50,7 @@ public class TestKS_Pair {
         System.out.println("Pair Count: "+pair_cnt);
         /*Каждые из пар образуют так же по 33 сигнала
         * изза того что повторяются 2 поделим на 2*/
-        long total_capacity =  (p*pair_cnt)/2;
+        long total_capacity =  ((p+2)*pair_cnt)/2;
         System.out.println("Total Capacity: "+total_capacity);
         /*
         pereodic_cross_correl_list.addAll(pereodic_cross_correl_list);

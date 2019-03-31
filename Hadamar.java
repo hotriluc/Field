@@ -52,7 +52,7 @@ public class Hadamar {
             System.out.println();
         }*/
 
-        Hadamar h1 = new Hadamar(16);
+        Hadamar h1 = new Hadamar(256);
 
         int [][]arr1 = h1.getHadamarMatrix();
 
@@ -62,6 +62,8 @@ public class Hadamar {
 
 
         }
+
+
 
     }
 }

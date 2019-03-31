@@ -14,6 +14,7 @@ public class Field {
     private int teta_min;
     private ArrayList<Integer> teta_arr_list;
     private int signal_arr[];
+    private Euler eil;
 
 
     public Field(int P) {
@@ -22,9 +23,38 @@ public class Field {
         this.teta = 2;
         this.teta_arr_list = new ArrayList<>();
         this.signal_arr = new int[P - 1];
+        this.eil = new Euler(getP()-1);
 
     }
 
+    public void CalculateANDprintAllInfo(){
+
+        //euler
+
+        System.out.println("\u03D5("+(getP()-1)+") = "+eil.getPhi());
+
+        //with euclide algorithm searching for all coprime of n
+        ArrayList<Integer> cl = eil.getCoprime();
+        eil.printCoprime();
+
+        /*
+         * TETA_MIN CALCULATING
+         *
+         *
+         * */
+        Euler eil2 = new Euler(getP());
+        System.out.print("\u03D5("+(getP())+") = "+eil2.getPhi()+ " = ");
+        teta_min = getTeta_min(eil2);
+
+        System.out.printf("For P =%d \u03F4min = %d",getP(),teta_min);
+
+        setTeta(teta_min);
+        System.out.printf("\n\u03F4 = %d\n",getTeta());
+
+        /*FillingTable*/
+        filltable();
+        printArray();
+    }
 
     public void setArray(int[][] array, int P) {
 
@@ -44,6 +74,10 @@ public class Field {
     public void setP(int P) {
 
         this.P = P;
+    }
+
+    public Euler getEuler(){
+        return this.eil;
     }
 
     public ArrayList<Integer> getTetaList(int teta_min, ArrayList<Integer> coprime_arr_list) {
@@ -150,6 +184,15 @@ public class Field {
                 array[5][i] = 1;
             }
         }
+    }
+
+    public void filltable(){
+        fill_row_Ui();
+        fill_row_ai();
+        fill_row_Ai();
+        fill_row_bi();
+        fill_row_MH();
+        fill_row_Psi();
     }
 
     public int[] getPsi() {
