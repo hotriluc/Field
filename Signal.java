@@ -186,7 +186,21 @@ public class Signal {
 
 
 
+    public static void CaclculatePFVK_between_Pair(int[]sig_1,int[]sig_2,boolean printflag){
+        Signal s = new Signal();
+        s.setSignal(sig_2);
+        List<Integer> cross_pereodic = s.getPereodicCorrelList(sig_1,printflag);
+        System.out.println("\nPFVK");
+        int r_max = StatClass.getRmaxWO(cross_pereodic, sig_1.length);
+        System.out.println("Rmax=" + r_max +" = "+"x\u221AL = "+StatClass.getX(r_max,sig_1.length)+"\u221A"+sig_1.length);
+        System.out.println("Count: " + StatClass.getCntAndPos(cross_pereodic, r_max));
 
+        int r_min = StatClass.getRmin(cross_pereodic);
+        System.out.printf("Rmin: %d \n",r_min);
+        System.out.println("Count: " + StatClass.getCntAndPos(cross_pereodic,r_min)+"\n");
+
+
+    }
 
 
 

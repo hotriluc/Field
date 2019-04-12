@@ -1,3 +1,5 @@
+import com.sun.java.browser.plugin2.DOM;
+
 import java.util.*;
 
 public class StatClass {
@@ -116,6 +118,7 @@ public class StatClass {
     static double CalculateDeviation(double dispersion){
         return Math.sqrt(dispersion);
     }
+
     static void ModuleSignal(List<Integer> list){
         for (int i =0;i<list.size();i++){
             int tmp = list.get(i);
@@ -136,23 +139,38 @@ public class StatClass {
 
         if (flag==true){
             StatClass.ModuleSignal(tmp_list);
-        }
+            System.out.println("\nПо модулю боковых выбросов");
+        }else {System.out.println("\nДля всех боквых выбросов");}
 
         double avg_x = StatClass.CalculateAVG(tmp_list);
-        System.out.println("AVG_module:" + avg_x / Math.sqrt(source_sig.length));
+        System.out.println("AVG:" + avg_x / Math.sqrt(source_sig.length));
         avg_list.add(StatClass.CalculateAVG(tmp_list));
 
         //дисперсия модулей
         double dispersion_x = StatClass.CalculateDispersion(tmp_list, avg_x);
-        System.out.println("Dispersion_Module:" + dispersion_x / Math.sqrt(source_sig.length));
+        System.out.println("Dispersion:" + dispersion_x / Math.sqrt(source_sig.length));
         dispersion_list.add(dispersion_x);
 
         //СКО модулей
         double deviation_x = Math.sqrt(dispersion_x);
-        System.out.println("Deviation_Module:" + deviation_x / Math.sqrt(source_sig.length));
+        System.out.println("Deviation:" + deviation_x / Math.sqrt(source_sig.length));
         deviation_list.add(deviation_x );
     }
 
-
+    static void printStat(List<Integer>rmax_list,
+                          List<Double> avg_module_list,List<Double>dispersion_module_list,List<Double>deviation_module_list,
+                          List<Double> avg_list,List<Double>dispersion_list,List<Double> deviation_list,
+                          int p
+                          ){
+        System.out.println("\n==========STAT==========");
+        System.out.println("X = " + StatClass.CalculateAVG(rmax_list) / Math.sqrt(p));
+        System.out.println("AVG_Module = " + StatClass.CalculateAVG(avg_module_list)/ Math.sqrt(p));
+        System.out.println("Dispersion_Module = " + StatClass.CalculateAVG(dispersion_module_list)/ Math.sqrt(p));
+        System.out.println("Deviation_Module = " + StatClass.CalculateAVG(deviation_module_list)/ Math.sqrt(p));
+        System.out.println("AVG_ = " + StatClass.CalculateAVG(avg_list)/ Math.sqrt(p));
+        System.out.println("Dispersion_ = " + StatClass.CalculateAVG(dispersion_list)/ Math.sqrt(p));
+        System.out.println("Deviation_ = " + StatClass.CalculateAVG(deviation_list)/ Math.sqrt(p));
+        System.out.println("\n========================");
+    }
 
 }

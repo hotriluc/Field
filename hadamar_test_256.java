@@ -1,10 +1,41 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class hadamar_test_256  {
 
-    public static void  CombinationsFVK(List<int[]> arr_list,int p,boolean printflag){
+    public static void  CombinationsFVK_Stat(List<int[]> arr_list,List<Pair> lp,int p,boolean printflag){
+        List<Integer> rmax_list = new ArrayList<>();
+        List<Double> avg_module_list = new ArrayList<>();
+        List<Double> dispersion_module_list = new ArrayList<>();
+        List<Double> deviation_module_list = new ArrayList<>();
+        for(Pair pair:lp){
+            int x = pair.getX();
+            int y  = pair.getY();
+            int [] source_sig = arr_list.get(x).clone();
+
+                    int[] shifted_sig = arr_list.get(y).clone();
+
+
+                    Signal s = new Signal(p);
+                    s.setSignal(shifted_sig);
+
+                    List<Integer> cross_pereodic = s.getPereodicCorrelList(source_sig,printflag);
+                    int r_max = StatClass.getRmaxWO(cross_pereodic, source_sig.length);
+                    System.out.println("\nRmax=" + r_max + " = " + "x\u221AL = " + StatClass.getX(r_max, source_sig.length) + "\u221A" + source_sig.length);
+                    System.out.println("Count: " + StatClass.getCntAndPos(cross_pereodic, r_max));
+
+                    rmax_list.add(r_max);
+                }
+
+            System.out.println("\n==========STAT==========");
+            System.out.println("X = " + StatClass.CalculateAVG(rmax_list) / Math.sqrt(p));
+        }
+
+    //фвк между хдс
+    public static void  CombinationsFVK_CDS(List<int[]> arr_list,int p,boolean printflag,List<Integer> dec_coef){
+
         for(int i =0;i<arr_list.size();i++){
             int [] source_sig = arr_list.get(i).clone();
             for(int j = 0;j<arr_list.size();j++) {
@@ -15,8 +46,8 @@ public class hadamar_test_256  {
                     Signal s = new Signal(p);
                     s.setSignal(shifted_sig);
                     System.out.printf("\nFVK(%d,%d)\n", i, j);
-                    System.out.println("Signal №"+i+": "+ Arrays.toString(source_sig));
-                    System.out.println("Signal №"+j+": "+ Arrays.toString(shifted_sig));
+                    System.out.println("Сигнал ХДС Коэфф.Децимации "+dec_coef.get(i%arr_list.size())+" : "+ Arrays.toString(source_sig));
+                    System.out.println("Сигнал ХДС Коэфф.Децимации "+dec_coef.get(j%arr_list.size())+" : "+ Arrays.toString(shifted_sig));
 
 
                     System.out.println("PFVK");
@@ -25,7 +56,7 @@ public class hadamar_test_256  {
                     List<Integer> cross_pereodic = s.getPereodicCorrelList(source_sig,printflag);
 
                     int r_max = StatClass.getRmaxWO(cross_pereodic, p);
-                    System.out.println("\nRmax=" + r_max +" = "+"x\u221AL = "+StatClass.getX(r_max,p)+"\u221A"+p);
+                    System.out.println("Rmax=" + r_max +" = "+"x\u221AL = "+StatClass.getX(r_max,p)+"\u221A"+p);
                     System.out.println("Count: " + StatClass.getCntAndPos(cross_pereodic, r_max));
 
                     int r_min = StatClass.getRmin(cross_pereodic);
@@ -38,7 +69,7 @@ public class hadamar_test_256  {
                     }else {r_mod = Math.abs(r_min);}
 
 
-
+                    /*
                     Signal s1 = new Signal(p);
                     s1.setSignal(shifted_sig2);
 
@@ -47,13 +78,14 @@ public class hadamar_test_256  {
 
                     int rmax1 = StatClass.getRmaxWO(cross_apereodic, p);
                     System.out.println("\nRmax=" + rmax1+" = "+"x\u221AL = "+StatClass.getX(rmax1,p)+"\u221A"+p);
-                    System.out.println("Count: " + StatClass.getCntAndPos(cross_apereodic, rmax1));
+                    System.out.println("Count: " + StatClass.getCntAndPos(cross_apereodic, rmax1));*/
                 }
             }
         }
     }
 
-    public static List<Pair> CombinationsFVK(List<int[]> arr_list,int p,boolean printflag,int N){
+    //фвк между производными
+    public static List<Pair> CombinationsFVK_DerivedSignals(List<int[]> arr_list,int p,boolean printflag,int N){
         List<Pair> pairt_list = new ArrayList<>();
         for(int i =0;i<arr_list.size();i++){
             int [] source_sig = arr_list.get(i).clone();
@@ -76,7 +108,7 @@ public class hadamar_test_256  {
                     List<Integer> cross_pereodic = s.getPereodicCorrelList(source_sig,printflag);
 
                     int r_max = StatClass.getRmaxWO(cross_pereodic, p);
-                    System.out.println("\nRmax=" + r_max +" = "+"x\u221AL = "+StatClass.getX(r_max,p)+"\u221A"+p);
+                    System.out.println("Rmax=" + r_max +" = "+"x\u221AL = "+StatClass.getX(r_max,p)+"\u221A"+p);
                     System.out.println("Count: " + StatClass.getCntAndPos(cross_pereodic, r_max));
 
                     int r_min = StatClass.getRmin(cross_pereodic);
@@ -100,7 +132,7 @@ public class hadamar_test_256  {
                     List<Integer> cross_apereodic = s1.getApereodicCorrelList(source_sig,printflag);
 
                     int rmax1 = StatClass.getRmaxWO(cross_apereodic, p);
-                    System.out.println("\nRmax=" + rmax1+" = "+"x\u221AL = "+StatClass.getX(rmax1,p)+"\u221A"+p);
+                    System.out.println("Rmax=" + rmax1+" = "+"x\u221AL = "+StatClass.getX(rmax1,p)+"\u221A"+p);
                     System.out.println("Count: " + StatClass.getCntAndPos(cross_apereodic, rmax1));
                 }
             }
@@ -111,7 +143,7 @@ public class hadamar_test_256  {
 
 
 
-    public static void main(String[]args){
+    public static void main(String[]args)throws IOException {
         int [][] h256;
 
         int arr[][] = {
@@ -126,10 +158,14 @@ public class hadamar_test_256  {
 
         };
 
+        CDS cds256 = new CDS();
+        List<Integer> selected_dec_coef = cds256.getSelectedDecimationCoef(18);
+
         List<int[]> arr_list = new ArrayList<>();
         for(int i=  0;i<arr.length;i++){
         arr_list.add(arr[i]);
         }
+
 
 
         int p = 256;
@@ -147,10 +183,16 @@ public class hadamar_test_256  {
 
         System.out.println("========================");
         System.out.println("Отобранные сигналы ХДС:");
-        StatClass.printListWithArr(arr_list);
+        for(int i = 0; i<arr_list.size();i++){
+
+            System.out.printf(i+") Сигнал ХДС Коэфф.Децимации %d\n",selected_dec_coef.get(i));
+            System.out.println(Arrays.toString(arr_list.get(i)));
+
+
+        }
         System.out.println("========================");
 
-      //  CombinationsFVK(arr_list,p,false);
+        CombinationsFVK_CDS(arr_list,p,false,selected_dec_coef);
 
 
         System.out.println("========================");
@@ -173,7 +215,7 @@ public class hadamar_test_256  {
         for(int i = 0;i<sig_count;i++){
             int random_pos = 1 + (int) (Math.random() * h256.length-1);// Случайный индекс из адамара
 
-            System.out.printf((i)+") Строка №%d из матрицы Уолша-Адамара с сигналом ХДС №%d:\n",random_pos,i%arr_list.size());
+            System.out.printf((i)+") Строка №%d из матрицы Уолша-Адамара с сигналом ХДС Коэфф.Децимации %d:\n",random_pos,selected_dec_coef.get(i%arr_list.size()));
             System.out.println("Адамар:"+Arrays.toString(h256[random_pos]));
             System.out.println("ХДС:"+Arrays.toString(arr[i%arr_list.size()]));
 
@@ -261,10 +303,30 @@ public class hadamar_test_256  {
             }
         }
         */
+
+       //Перебираем все и возвращаем лист с отобраными пары
         List<Pair> lp = new ArrayList<>();
-        lp = CombinationsFVK(tmplis,p,false,40);
+        int n = 36;
+        lp = CombinationsFVK_DerivedSignals(tmplis,p,false,n);
+
+        //Уже отобранные
+        System.out.println("============ОТБОР ПАР ИЗ ПРОИЗВОДНЫХ============");
+        System.out.printf("Из %d производных сигналов получилось получить %d пар сигналов значения Rmax ПФВК,которых <= %f\n",tmplis.size(),lp.size(),StatClass.getX(n,256));
         for(Pair pair:lp){
-            System.out.println(pair.getX()+" "+ pair.getY());
+
+            int x  = pair.getX();
+            int y = pair.getY();
+            System.out.printf("Пара (%d, %d)\n",x,y);
+            Signal.CaclculatePFVK_between_Pair(tmplis.get(x),tmplis.get(y),true);
         }
+
+        //CombinationsFVK_Stat(tmplis,lp,p,false);
+
+        /*
+        for(Pair pair:lp){
+            int x  = pair.getX();
+            int y = pair.getY();
+            Signal.CaclculatePFVK_between_Pair(tmplis.get(x),tmplis.get(y),true);
+        }*/
     }
 }

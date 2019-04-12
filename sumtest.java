@@ -29,7 +29,8 @@ public static void main(String[]args){
     Signal s1 = new Signal(p);
 
     s1.setSignal(arr2);
-
+    System.out.println(Arrays.toString(arr));
+    System.out.println(Arrays.toString(arr2));
     List<Integer> pereodic_cross_correl_list = s1.getPereodicCorrelList(arr,true);
     System.out.println("=================");
     int rmax = StatClass.getRmaxWO(pereodic_cross_correl_list, 127);
@@ -38,9 +39,10 @@ public static void main(String[]args){
 
     List<int[]> list = s1.getListWithArrPereodic();
    System.out.println("\nList size:" + list.size());
+   StatClass.printListWithArr(list);
    int cnt=0;
 
-   //Перебор всех сигналво и подсчет пфвк
+   //Перебор всех сигналвов(сдвижки) и подсчет пфвк
    for(int i = 0;i<list.size();i++){
       Signal s2 = new Signal(p);
       int []source_sig = list.get(i);
@@ -48,7 +50,12 @@ public static void main(String[]args){
          if(i<j){
          int []shift_sig = list.get(j);
             s2.setSignal(shift_sig);
-            List<Integer> pereodic_cross_correl_list2 = s2.getPereodicCorrelList(source_sig,true);
+            /*
+             System.out.printf("\nFVK(%d,%d)\n", i, j);
+             System.out.println("Signal №"+i+": "+ Arrays.toString(source_sig));
+             System.out.println("Signal №"+j+": "+ Arrays.toString(shift_sig));
+            */
+             List<Integer> pereodic_cross_correl_list2 = s2.getPereodicCorrelList(source_sig,false);
             System.out.println();
             //System.out.println(Arrays.toString(shift_sig));
             int rmax2 = StatClass.getRmaxWO(pereodic_cross_correl_list2, 127);
@@ -58,9 +65,10 @@ public static void main(String[]args){
              //для 511 получилось rmax = 63
              //для 127 получилось rmax = 31
              ///
-            if(rmax2<=99){
+            if(rmax2<=63){
                cnt++;
                System.out.printf("Pair: %d , %d\n",i,j);
+               System.out.println("Rmax:"+rmax2);
             }
          }else{continue;}
 

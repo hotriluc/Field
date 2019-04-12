@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Test {
+    //Отбираем коеф децимации сигналы которые построенны на них дают Rmax АФАК <=N
+
 
     public static void main(String[]args)throws IOException {
         int p=0;
@@ -81,6 +83,7 @@ public class Test {
         }
 
 
+        //List<Integer> selected_decimation_coef = CDS.getSelectedDecimationCoef(f1,dec_list,18);
 
     }
 }
