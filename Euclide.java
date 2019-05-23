@@ -16,5 +16,8 @@ public class Euclide {
         return this.gcd;
     }
 
+    public static void main(String[]args){
 
+        System.out.println(new Euclide().getGCD(127,14));
+    }
 }

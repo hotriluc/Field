@@ -21,18 +21,21 @@ public class CDS {
     private Field f1;
     private List<int[]> decimation_list;//ХДС ДЛЯ РАЗНЫХ КОЕФ ДЕЦИМАЦИИ
 
+
     public static void SourceSigWithSigList(FVK f,int[]source_sig,List<int[]> sig_list,boolean printflag) {
+        List<Integer> rmax_list = new ArrayList<>();
+        List<Double> avg_module_list = new ArrayList<>();
+        List<Double> dispersion_module_list = new ArrayList<>();
+        List<Double> deviation_module_list = new ArrayList<>();
+
+        List<Double> avg_list = new ArrayList<>();
+        List<Double> dispersion_list = new ArrayList<>();
+        List<Double> deviation_list = new ArrayList<>();
+        int p = source_sig.length;
+
         switch (f) {
             case PFVK: {
                 System.out.println("\n========================");
-                List<Integer> rmax_list = new ArrayList<>();
-                List<Double> avg_module_list = new ArrayList<>();
-                List<Double> dispersion_module_list = new ArrayList<>();
-                List<Double> deviation_module_list = new ArrayList<>();
-
-                List<Double> avg_list = new ArrayList<>();
-                List<Double> dispersion_list = new ArrayList<>();
-                List<Double> deviation_list = new ArrayList<>();
 
 
                 /*для расчета фвк исходного сигнала с остальными сигналами коеф децимации
@@ -43,6 +46,7 @@ public class CDS {
                     int[]tmp = sig_list.get(i).clone();
                     s.setSignal(tmp);
                     System.out.println("\nPFVK");
+
                     List<Integer> pereodic_cross_correl_list = s.getPereodicCorrelList(source_sig, printflag);
 
                     int r_max = StatClass.getRmaxWO(pereodic_cross_correl_list, source_sig.length);
@@ -105,28 +109,12 @@ public class CDS {
 
                 }
 
-                System.out.println("\n==========STAT==========");
-                System.out.println("X = " + StatClass.CalculateAVG(rmax_list) / Math.sqrt(source_sig.length));
-                System.out.println("AVG_Module = " + StatClass.CalculateAVG(avg_module_list)/ Math.sqrt(source_sig.length));
-                System.out.println("Dispersion_Module = " + StatClass.CalculateAVG(dispersion_module_list)/ Math.sqrt(source_sig.length));
-                System.out.println("Deviation_Module = " + StatClass.CalculateAVG(deviation_module_list)/ Math.sqrt(source_sig.length));
-                System.out.println("AVG_ = " + StatClass.CalculateAVG(avg_list)/ Math.sqrt(source_sig.length));
-                System.out.println("Dispersion_ = " + StatClass.CalculateAVG(dispersion_list)/ Math.sqrt(source_sig.length));
-                System.out.println("Deviation_ = " + StatClass.CalculateAVG(deviation_list)/ Math.sqrt(source_sig.length));
-                System.out.println("\n========================");
+
             }
             break;
 
             case AFVK: {
 
-                List<Integer> rmax_list = new ArrayList<>();
-                List<Double> avg_module_list = new ArrayList<>();
-                List<Double> dispersion_module_list = new ArrayList<>();
-                List<Double> deviation_module_list = new ArrayList<>();
-
-                List<Double> avg_list = new ArrayList<>();
-                List<Double> dispersion_list = new ArrayList<>();
-                List<Double> deviation_list = new ArrayList<>();
                 /*для расчета фвк исходного сигнала с остальными сигналами коеф децимации
                  * цикл начинаем с 1(т.е без сигнала построенного коеф децимицаии 1)
                  * */
@@ -159,28 +147,13 @@ public class CDS {
 
                 }
 
-                System.out.println("\n==========STAT==========");
-                System.out.println("X = " + StatClass.CalculateAVG(rmax_list) / Math.sqrt(source_sig.length));
-                System.out.println("AVG_Module = " + StatClass.CalculateAVG(avg_module_list)/ Math.sqrt(source_sig.length));
-                System.out.println("Dispersion_Module = " + StatClass.CalculateAVG(dispersion_module_list)/ Math.sqrt(source_sig.length));
-                System.out.println("Deviation_Module = " + StatClass.CalculateAVG(deviation_module_list)/ Math.sqrt(source_sig.length));
-                System.out.println("AVG_ = " + StatClass.CalculateAVG(avg_list)/ Math.sqrt(source_sig.length));
-                System.out.println("Dispersion_ = " + StatClass.CalculateAVG(dispersion_list)/ Math.sqrt(source_sig.length));
-                System.out.println("Deviation_ = " + StatClass.CalculateAVG(deviation_list)/ Math.sqrt(source_sig.length));
-                System.out.println("\n========================");
+
             }break;
 
 
             case PFAK:{
                 System.out.println("\n========================");
-                List<Integer> rmax_list = new ArrayList<>();
-                List<Double> avg_module_list = new ArrayList<>();
-                List<Double> dispersion_module_list = new ArrayList<>();
-                List<Double> deviation_module_list = new ArrayList<>();
 
-                List<Double> avg_list = new ArrayList<>();
-                List<Double> dispersion_list = new ArrayList<>();
-                List<Double> deviation_list = new ArrayList<>();
                 for (int i = 1; i < sig_list.size(); i++) {
                     Signal s = new Signal();
                     int[] tmp_source_sig = sig_list.get(i).clone();
@@ -191,6 +164,10 @@ public class CDS {
 
                     /*Без учета первого и последего*/
                     int r_max = StatClass.getRmaxWO(pereodic_auto_correl_list, source_sig.length);
+                    int r_min = StatClass.getRmin(pereodic_auto_correl_list);
+                    if(r_max<=Math.abs(r_min)){
+                        r_max = Math.abs(r_min);
+                    }
                     pereodic_auto_correl_list.remove(0);
                     pereodic_auto_correl_list.remove(pereodic_auto_correl_list.size()-1);
 
@@ -212,15 +189,7 @@ public class CDS {
 
                 }
 
-                System.out.println("\n==========STAT==========");
-                System.out.println("X = " + StatClass.CalculateAVG(rmax_list) / Math.sqrt(source_sig.length));
-                System.out.println("AVG_Module = " + StatClass.CalculateAVG(avg_module_list)/ Math.sqrt(source_sig.length));
-                System.out.println("Dispersion_Module = " + StatClass.CalculateAVG(dispersion_module_list)/ Math.sqrt(source_sig.length));
-                System.out.println("Deviation_Module = " + StatClass.CalculateAVG(deviation_module_list)/ Math.sqrt(source_sig.length));
-                System.out.println("AVG_ = " + StatClass.CalculateAVG(avg_list)/ Math.sqrt(source_sig.length));
-                System.out.println("Dispersion_ = " + StatClass.CalculateAVG(dispersion_list)/ Math.sqrt(source_sig.length));
-                System.out.println("Deviation_ = " + StatClass.CalculateAVG(deviation_list)/ Math.sqrt(source_sig.length));
-                System.out.println("\n========================");
+
             }
             break;
 
@@ -232,6 +201,7 @@ public class CDS {
 
         }
 
+        StatClass.printStat(rmax_list,avg_module_list,dispersion_module_list,deviation_module_list,avg_list,dispersion_list,deviation_list,p);
 
     }
 
@@ -248,7 +218,7 @@ public class CDS {
                 List<Double> avg_list = new ArrayList<>();
                 List<Double> dispersion_list = new ArrayList<>();
                 List<Double> deviation_list = new ArrayList<>();
-
+                List<Integer> dec_coef_list = getField().getEuler().getCoprime();
 
                 /*для расчета фвк исходного сигнала с остальными сигналами коеф децимации
                  * цикл начинаем с 1(т.е без сигнала построенного коеф децимицаии 1)
@@ -257,6 +227,7 @@ public class CDS {
                     Signal s = new Signal();
                     s.setSignal(decimation_list.get(i));
                     System.out.println("\nPFVK");
+                    System.out.println(dec_coef_list.get(i));
                     List<Integer> pereodic_cross_correl_list = s.getPereodicCorrelList(source_sig, printflag);
 
                     int r_max = StatClass.getRmaxWO(pereodic_cross_correl_list, source_sig.length);
@@ -272,47 +243,13 @@ public class CDS {
                     //для значения rmax
                     rmax_list.add(r_max);
 
-                    /*
-                      Для модулей
-                    //для мат ожидание модулей боковых выбросов
-                    List<Integer> tmp_list = new ArrayList<>();
-                    tmp_list.addAll(pereodic_cross_correl_list);
-                    StatClass.ModuleSignal(tmp_list);
-                    double avg_module_x = StatClass.CalculateAVG(tmp_list);
-                    System.out.println("AVG_module:" + avg_module_x / Math.sqrt(source_sig.length));
-                    avg_module_list.add(StatClass.CalculateAVG(tmp_list));
 
-                    //дисперсия модулей
-                    double dispersion_module_x = StatClass.CalculateDispersion(tmp_list, avg_module_x);
-                    System.out.println("Dispersion_Module:" + dispersion_module_x / Math.sqrt(source_sig.length));
-                    dispersion_module_list.add(dispersion_module_x);
-
-                    //СКО модулей
-                    double deviation_module_x = Math.sqrt(dispersion_module_x);
-                    System.out.println("Deviation_Module:" + deviation_module_x / Math.sqrt(source_sig.length));
-                    deviation_module_list.add(deviation_module_x);
-                    */
 
                     //FLAG = TRUE для модулей боковых выбросов
                     StatClass.CalculateAndSet(pereodic_cross_correl_list,source_sig,avg_module_list,dispersion_module_list,deviation_module_list,true);
 
 
-                    /*Для всех боковых выбросов*/
-                    /*
-                    List<Integer> tmp_list2 = new ArrayList<>();
-                    tmp_list2.addAll(pereodic_cross_correl_list);
 
-                    double avg_x = StatClass.CalculateAVG(tmp_list2);
-                    System.out.println("AVG_module:" + avg_x / Math.sqrt(source_sig.length));
-                    avg_list.add(StatClass.CalculateAVG(tmp_list2));
-
-                    double dispersion_x = StatClass.CalculateDispersion(tmp_list2, avg_x);
-                    System.out.println("Dispersion_Module:" + dispersion_x / Math.sqrt(source_sig.length));
-                    dispersion_list.add(dispersion_x);
-
-                    double deviation_x = Math.sqrt(dispersion_x);
-                    System.out.println("Deviation_Module:" + deviation_x / Math.sqrt(source_sig.length));
-                    deviation_list.add(deviation_x);*/
 
                     /*flag = false Для всех боковых выбросов*/
                     StatClass.CalculateAndSet(pereodic_cross_correl_list,source_sig,avg_list,dispersion_list,deviation_list,false);
@@ -390,7 +327,10 @@ public class CDS {
 
     }
 
-    public List<Integer> getSelectedDecimationCoef(int N){
+    /*Для адамара
+    * добавь в будующем в качестве прараметра лист массивов для хранения сигналов
+    * находим по АФАК рмакс и запоминаем коеф децмации*/
+    public List<Integer> getSelectedDecimationCoef(List<int[]> list,int N){
         List<Integer> selected_decimation_coef = new ArrayList<>();
         for(int i =1;i<decimation_list.size();i++) {
             //System.out.println("\nAFAK");
@@ -410,6 +350,7 @@ public class CDS {
             if(rmax == N){
                 //System.out.println(f1.getEuler().getCoprime().get(i)+" поз "+i);
                 selected_decimation_coef.add(this.f1.getEuler().getCoprime().get(i));
+                list.add(dec_signal);
             }
 
         }
@@ -499,12 +440,7 @@ public class CDS {
         System.out.printf("\n\u03F4 = %d\n",f1.getTeta());
 
         /*FillingTable*/
-        f1.fill_row_Ui();
-        f1.fill_row_ai();
-        f1.fill_row_Ai();
-        f1.fill_row_bi();
-        f1.fill_row_MH();
-        f1.fill_row_Psi();
+        f1.filltable();
         f1.printArray();
 
 
@@ -529,8 +465,12 @@ public class CDS {
         List<Integer> apereodic_auto_correl_list = s2.getApereodicCorrelList(b,true);
         */
         decimation_list = new ArrayList<>();
-        getDecimation_list(b,f1.getEuler().getCoprime());
+       // getDecimation_list(b,f1.getEuler().getCoprime());
 
+    }
+
+    public Field getField(){
+        return this.f1;
     }
 
     public static void main (String args[]) throws IOException {
@@ -713,9 +653,9 @@ public class CDS {
         RefineryUtilities.centerFrameOnScreen( chart4 );
         chart4.setVisible( true );
 
-        CDS.SourceSigWithSigList(FVK.PFVK,b,dec_list,false);
+        CDS.SourceSigWithSigList(FVK.PFVK,b,dec_list,true);
 
-        CDS.SourceSigWithSigList(FVK.AFVK,b,dec_list,false);
+        CDS.SourceSigWithSigList(FVK.AFVK,b,dec_list,true);
 
         CDS.SourceSigWithSigList(FVK.PFAK,b,dec_list,true);
 

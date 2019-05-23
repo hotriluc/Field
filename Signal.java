@@ -185,7 +185,7 @@ public class Signal {
     }
 
 
-
+    /*dlya hamdamara*/
     public static void CaclculatePFVK_between_Pair(int[]sig_1,int[]sig_2,boolean printflag){
         Signal s = new Signal();
         s.setSignal(sig_2);

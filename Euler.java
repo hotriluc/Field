@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Euler {
 
@@ -91,6 +92,13 @@ public class Euler {
        System.out.println("\n");
     }
 
+        public static void main(String []args){
+       int n = 67;
+            Euler e = new Euler(n);
+            System.out.println("ϕ("+n+") = "+e.getPhi());
 
+             e.getCoprime();
+             e.printCoprime();
+}
 
 }

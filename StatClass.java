@@ -133,11 +133,11 @@ public class StatClass {
 
     /*if flag = true расчет для модулей выбросов
     * if flag = false расчет для всех боковых выбросов*/
-    static void CalculateAndSet(List<Integer> correl_list,int[]source_sig,List<Double> avg_list,List<Double> dispersion_list,List<Double> deviation_list,boolean flag ){
+    static void CalculateAndSet(List<Integer> correl_list,int[]source_sig,List<Double> avg_list,List<Double> dispersion_list,List<Double> deviation_list,boolean module_stat_flag ){
         List<Integer> tmp_list = new ArrayList<>();
         tmp_list.addAll(correl_list);
 
-        if (flag==true){
+        if (module_stat_flag==true){
             StatClass.ModuleSignal(tmp_list);
             System.out.println("\nПо модулю боковых выбросов");
         }else {System.out.println("\nДля всех боквых выбросов");}

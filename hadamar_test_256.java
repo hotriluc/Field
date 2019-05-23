@@ -84,7 +84,7 @@ public class hadamar_test_256  {
         }
     }
 
-    //фвк между производными
+    //фвк между производными и отбор пар
     public static List<Pair> CombinationsFVK_DerivedSignals(List<int[]> arr_list,int p,boolean printflag,int N){
         List<Pair> pairt_list = new ArrayList<>();
         for(int i =0;i<arr_list.size();i++){
@@ -159,8 +159,17 @@ public class hadamar_test_256  {
         };
 
         CDS cds256 = new CDS();
-        List<Integer> selected_dec_coef = cds256.getSelectedDecimationCoef(18);
+        List<int[]>cds_list = new ArrayList<>();
+        /*ПОЛУЧАЕМ ЛИСТ ВСЕХ ХДС ПУТЕМ ДЕЦИМАЦИИ*/
+        cds256.getDecimation_list(cds256.getField().getPsi(),cds256.getField().getEuler().getCoprime());
 
+        /*ОТБИРАЕМ КОЕФ ДЕЦИМАЦИИ и СИГНАЛЫ ПОЛУЧЕННЫЕ ИМИ, ОТБОР ПО АФАК*/
+        List<Integer> selected_dec_coef = cds256.getSelectedDecimationCoef(cds_list,18);
+
+        System.out.println(selected_dec_coef);
+        StatClass.printListWithArr(cds_list);
+
+        /**/
         List<int[]> arr_list = new ArrayList<>();
         for(int i=  0;i<arr.length;i++){
         arr_list.add(arr[i]);
@@ -183,16 +192,16 @@ public class hadamar_test_256  {
 
         System.out.println("========================");
         System.out.println("Отобранные сигналы ХДС:");
-        for(int i = 0; i<arr_list.size();i++){
+        for(int i = 0; i<cds_list.size();i++){
 
             System.out.printf(i+") Сигнал ХДС Коэфф.Децимации %d\n",selected_dec_coef.get(i));
-            System.out.println(Arrays.toString(arr_list.get(i)));
+            System.out.println(Arrays.toString(cds_list.get(i)));
 
 
         }
         System.out.println("========================");
 
-        CombinationsFVK_CDS(arr_list,p,false,selected_dec_coef);
+        CombinationsFVK_CDS(cds_list,p,false,selected_dec_coef);
 
 
         System.out.println("========================");
@@ -215,12 +224,12 @@ public class hadamar_test_256  {
         for(int i = 0;i<sig_count;i++){
             int random_pos = 1 + (int) (Math.random() * h256.length-1);// Случайный индекс из адамара
 
-            System.out.printf((i)+") Строка №%d из матрицы Уолша-Адамара с сигналом ХДС Коэфф.Децимации %d:\n",random_pos,selected_dec_coef.get(i%arr_list.size()));
+            System.out.printf((i)+") Строка №%d из матрицы Уолша-Адамара с сигналом ХДС Коэфф.Децимации %d:\n",random_pos,selected_dec_coef.get(i%cds_list.size()));
             System.out.println("Адамар:"+Arrays.toString(h256[random_pos]));
-            System.out.println("ХДС:"+Arrays.toString(arr[i%arr_list.size()]));
+            System.out.println("ХДС:"+Arrays.toString(cds_list.get(i%cds_list.size())));
 
             for (int j = 0; j<h256.length; j++){
-                tmp[i][j] = (arr_list.get(i%arr_list.size())[j]*h256[random_pos][j]);
+                tmp[i][j] = (cds_list.get(i%cds_list.size())[j]*h256[random_pos][j]);
             }
 
             tmplis.add(tmp[i]);
@@ -306,6 +315,7 @@ public class hadamar_test_256  {
 
        //Перебираем все и возвращаем лист с отобраными пары
         List<Pair> lp = new ArrayList<>();
+        //Отбор пар сигналов у которых модули боквых не превышают
         int n = 36;
         lp = CombinationsFVK_DerivedSignals(tmplis,p,false,n);
 

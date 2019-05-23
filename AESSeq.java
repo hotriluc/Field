@@ -15,7 +15,7 @@ public class AESSeq {
     public int[] genereteSeq(int p){
         //Генерация криптосигналов
         SecureRandom random = new SecureRandom();
-        while(true){
+
             arr = new int[p];
 
             for (int i = 0; i < arr.length; i++) {
@@ -27,28 +27,13 @@ public class AESSeq {
                     arr[i] = a;
             }
             return this.arr;
-        }
+
 
     }
-    public static  void  main(String args[]){
 
-
-        List<Integer> apereodic_auto_correl_list ;
-        int p;
-        int[] arr;
-        AESSeq seq = new AESSeq();
-
-       // p = new Scanner(System.in).nextInt();
-        p = 130;
-        //Генерация криптосигналов
-        while(true){
-
-
-            arr = seq.genereteSeq(p);
-            //Source Signal arr[]
-            p = 130;
-
-
+    public int[] genereteSeq(int p , int if_rmax){
+        while (true) {
+            arr = genereteSeq(p);
             System.out.print(Arrays.toString(arr));
             Signal s1 = new Signal(p);
             int[] arr1 = arr.clone(); // will be shifted
@@ -61,8 +46,25 @@ public class AESSeq {
 
             System.out.println("\nRmax:" + rmax);
             System.out.println("Count: " + StatClass.getCntAndPos(pereodic_auto_correl_list, rmax));
-            if(rmax <=14){break;}//Задаем условие выхода из цикла как только найдется значение меньше или равное
+            if(rmax <=if_rmax){break;}
         }
+        return  arr;
+    }
+    public static  void  main(String args[]){
+
+
+        List<Integer> apereodic_auto_correl_list ;
+        int p;
+        int[] arr;
+        AESSeq seq = new AESSeq();
+
+        p = new Scanner(System.in).nextInt();
+        int if_rmax = new Scanner(System.in).nextInt();
+       // p = 130;
+        //Генерация криптосигналов
+
+
+       arr =  seq.genereteSeq(p,if_rmax);
 
             Signal s2 = new Signal(p);
             int[] arr2 = arr.clone(); // will be shifted
